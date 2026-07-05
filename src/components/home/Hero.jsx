@@ -1,57 +1,84 @@
-import { useState, useEffect } from "react";
-import logo from "../../assets/logo/white-crow-wb.png";
-import useScrollReveal from "../../hooks/useScrollReveal";
+import samuel from "../../assets/other/samuel.jpeg";
+import juan from "../../assets/other/farelo.png";
+import santiago from "../../assets/other/santiago.jpeg";
+import lucas from "../../assets/other/lucas.jpeg";
+import berdugo from "../../assets/other/berdugo.jpeg";
 
-const tagline = "Somos Ravenmind. Creamos software a medida, interfaces limpias y soluciones inteligentes que impulsan el crecimiento de tu negocio.";
+/* Franja duotono: los 5 ingenieros reales como material grafico del hero.
+   Se presentan con nombre en la seccion Nosotros; aca son plumaje. */
+const team = [
+    { src: samuel, position: "50% 30%" },
+    { src: juan, position: "50% 25%" },
+    { src: santiago, position: "50% 30%" },
+    { src: lucas, position: "50% 25%" },
+    { src: berdugo, position: "50% 30%" },
+];
 
-export default function Hero(){
+export default function Hero() {
+    return (
+        <section id="inicio" className="relative w-full overflow-hidden scroll-mt-20 bg-plume-0">
+            <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-[110rem] flex-col justify-between gap-10 px-gutter pb-12 pt-6 animate-fade-in lg:min-h-[calc(100svh-6rem)] lg:pt-10">
 
-    const [isLogoHovered, setIsLogoHovered] = useState(false);
-    const [typedText, setTypedText] = useState("");
-    const {ref, isVisible} = useScrollReveal({threshold: 0.2});
-
-    useEffect(() => {
-        if (!isVisible) return;
-        const timer = setInterval(() => {
-            setTypedText(prev => {
-                if (prev.length >= tagline.length) { clearInterval(timer); return prev; }
-                return tagline.slice(0, prev.length + 1);
-            });
-        }, 35);
-        return () => {
-            clearInterval(timer);
-            setTypedText("");
-        };
-    }, [isVisible]);
-
-    return(
-        <section id="inicio" className="relative w-full overflow-hidden scroll-mt-20 py-section bg-plume-0">
-
-            <div ref={ref} className={`w-full max-w-5xl lg:max-w-none min-h-[35vh] sm:min-h-[90vh] flex flex-col items-start justify-start gap-0 relative mx-auto lg:mx-0 px-6 sm:px-10 lg:px-17 transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-                
-                <div
-                   onMouseEnter={()=>setIsLogoHovered(true)}
-                    onMouseLeave={()=>setIsLogoHovered(false)}
-                    className="self-center sm:self-start sm:ml-32 -mb-3 md:-mb-6 "
-                >
-                    <img src={logo} alt="Ravenmind - Logo principal" width={128} height={128} className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32"/>
+                {/* ── Meta del estudio ── */}
+                <div className="flex items-baseline justify-between gap-4 text-caption uppercase tracking-[0.18em] text-ink-mute">
+                    <span>Estudio de software</span>
+                    <span className="hidden sm:inline">Cartagena — Colombia</span>
+                    <span aria-label="Cinco ingenieros">5 ingenieros</span>
                 </div>
-                <p className="w-full text-center sm:text-left text-title-mobile sm:text-5xl lg:text-big-title-v tracking-wider text-white font-bold leading-none font-title" aria-hidden="true">BIENVENIDO A:</p>
-                <h1 className="w-full text-center sm:text-left text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black text-transparent bg-linear-to-r from-white from-30 to-blue-electric bg-clip-text animate-neon leading-none mb-5 font-title tracking-wide break-words">RAVEN MIND</h1>
-                
-                <p
-                    className="w-full text-center sm:text-left text-body2 sm:text-subtitle font-medium text-white/80 leading-6 lg:max-w-prose"
-                    aria-live="polite"
-                    aria-atomic="true"
-                >
-                    {typedText}
-                    <span className="animate-pulse" aria-hidden="true">|</span>
-                </p>
-            </div>
 
-            <div className="hidden lg:block absolute -top-20 right-0 w-auto h-auto pointer-events-none">
-                <img src={logo} alt="" width={896} height={896} className={`w-[56rem] h-auto ${isLogoHovered?'opacity-10 translate-x-1/3':'opacity-0 translate-x-1/3'} transition-all duration-700`} />
+                {/* ── Wordmark escalonado + franja duotono ── */}
+                <h1 aria-label="Ravenmind" className="flex w-full flex-col gap-2 sm:gap-3">
+                    <span aria-hidden="true" className="type-display text-display text-ink">
+                        RAVEN
+                    </span>
+
+                    <span aria-hidden="true" className="grid grid-cols-5 gap-1 sm:gap-1.5">
+                        {team.map(({ src, position }, i) => (
+                            <span key={i} className="tone-media block h-[clamp(4.5rem,15vw,11rem)]">
+                                <img
+                                    src={src}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    style={{ objectPosition: position }}
+                                />
+                            </span>
+                        ))}
+                    </span>
+
+                    <span aria-hidden="true" className="type-display self-end text-display text-ink">
+                        MIND
+                    </span>
+                </h1>
+
+                {/* ── Copy + acciones ── */}
+                <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
+                    <p className="max-w-md text-lead leading-snug text-ink-dim">
+                        Software a medida para empresas que no pueden permitirse
+                        improvisar: plataformas web, interfaces y sitios corporativos
+                        construidos con precisión de ingeniería.
+                    </p>
+
+                    <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end">
+                        <a
+                            href="#contacto"
+                            className="group inline-flex items-center gap-2 text-copy font-semibold text-ink transition-colors duration-[var(--motion-quick)] hover:text-iris focus-visible:text-iris"
+                        >
+                            Hablemos de tu proyecto
+                            <span aria-hidden="true" className="transition-transform duration-[var(--motion-quick)] group-hover:translate-x-1">
+                                →
+                            </span>
+                        </a>
+                        <a
+                            href="#servicios"
+                            className="text-note text-ink-mute underline decoration-transparent underline-offset-4 transition-colors duration-[var(--motion-quick)] hover:text-ink hover:decoration-iris"
+                        >
+                            Ver servicios
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </section>
-    )
+    );
 }

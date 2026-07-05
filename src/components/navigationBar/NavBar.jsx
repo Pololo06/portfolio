@@ -69,96 +69,89 @@ export default function NavBar() {
     return (
         <nav
             ref={navRef}
-            className={`w-full sticky top-0 z-50 relative text-white transition-all duration-300 ${
-                scrolled
-                    ? "bg-black/80 backdrop-blur-xl shadow-[0_2px_24px_rgba(0,0,0,0.4)]"
-                    : "bg-transparent backdrop-blur-sm"
+            className={`sticky top-0 z-50 w-full text-ink transition-colors duration-[var(--motion-base)] ${
+                scrolled || menuOpen ? "bg-plume-0" : "bg-transparent"
             }`}
         >
-            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20 sm:h-20 lg:h-24">
+            <div className="mx-auto flex h-20 max-w-[110rem] items-center justify-between px-gutter lg:h-24">
 
                 {/* ── Logo ── */}
-                <a href="#inicio" onClick={(e) => handleLinkClick(e, "inicio")}>
-                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className="h-16 sm:h-18 lg:h-22 w-auto" />
+                <a href="#inicio" onClick={(e) => handleLinkClick(e, "inicio")} aria-label="Ravenmind — ir al inicio">
+                    <img src={logo} alt="" width={80} height={80} className="h-16 w-auto sm:h-18 lg:h-22" />
                 </a>
 
                 {/* ── Links desktop ── */}
-                <div className="hidden md:flex items-center gap-8">
-                    {links.map((link) => (
-                        <a
-                            key={link.id}
-                            href={`#${link.id}`}
-                            aria-current={activeSection === link.id ? "page" : undefined}
-                            className="relative pb-2 text-body font-medium transition-colors duration-300 group"
-                            style={{
-                                color: activeSection === link.id ? "#FFFFFF" : "#999999",
-                            }}
-                        >
-                            {link.text}
-
-                            {/* Indicador activo — línea debajo */}
-                            <span
-                                style={{
-                                    position: "absolute",
-                                    bottom: 0,
-                                    left: 0,
-                                    height: "2px",
-                                    backgroundColor: "#00A3FF",
-                                    borderRadius: "9999px",
-                                    transition: "width 0.3s ease, opacity 0.3s ease",
-                                    width: activeSection === link.id ? "100%" : "0%",
-                                    opacity: activeSection === link.id ? 1 : 0,
-                                }}
-                            />
-                        </a>
-                    ))}
+                <div className="hidden items-center gap-8 md:flex">
+                    {links.map((link) => {
+                        const active = activeSection === link.id;
+                        return (
+                            <a
+                                key={link.id}
+                                href={`#${link.id}`}
+                                aria-current={active ? "page" : undefined}
+                                className={`relative pb-1.5 text-note font-medium transition-colors duration-[var(--motion-quick)] ${
+                                    active ? "text-ink" : "text-ink-mute hover:text-ink"
+                                }`}
+                            >
+                                {link.text}
+                                {/* Indicador activo — único azul permitido en reposo (regla 2) */}
+                                <span
+                                    aria-hidden="true"
+                                    className={`absolute inset-x-0 bottom-0 h-[2px] origin-left bg-iris transition-[transform,opacity] duration-[var(--motion-base)] ease-[var(--ease-hold)] ${
+                                        active ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                                    }`}
+                                />
+                            </a>
+                        );
+                    })}
                 </div>
 
                 {/* ── Botón hamburguesa mobile ── */}
                 <button
-                    className="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 cursor-pointer"
+                    className="flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-1 md:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
                     aria-expanded={menuOpen}
                     aria-controls="mobile-menu"
                 >
-                    <span className={`block h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-                    <span className={`block h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-                    <span className={`block h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+                    <span className={`block h-[2px] w-5 rounded-full bg-ink transition-transform duration-[var(--motion-base)] ${menuOpen ? "translate-y-1.5 rotate-45" : ""}`} />
+                    <span className={`block h-[2px] w-5 rounded-full bg-ink transition-opacity duration-[var(--motion-base)] ${menuOpen ? "opacity-0" : ""}`} />
+                    <span className={`block h-[2px] w-5 rounded-full bg-ink transition-transform duration-[var(--motion-base)] ${menuOpen ? "-translate-y-1.5 -rotate-45" : ""}`} />
                 </button>
 
             </div>
 
-            {/* ── Menú mobile desplegable ── */}
+            {/* ── Menú mobile desplegable (en flujo: empuja el contenido) ── */}
             <div
                 ref={menuRef}
                 id="mobile-menu"
                 role="navigation"
                 aria-label="Menú principal"
-                className={`md:hidden overflow-hidden bg-black-soft/95 backdrop-blur-xl border-t border-muted/20 transition-all duration-300 ease-in-out ${
-                    menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+                className={`overflow-hidden bg-plume-2 transition-all duration-[var(--motion-base)] ease-[var(--ease-hold)] md:hidden ${
+                    menuOpen ? "max-h-96 opacity-100" : "pointer-events-none max-h-0 opacity-0"
                 }`}
             >
-                <div className="flex flex-col px-6 py-4 gap-1">
-                    {links.map((link) => (
-                        <a
-                            key={link.id}
-                            href={`#${link.id}`}
-                            onClick={(e) => handleLinkClick(e, link.id)}
-                            aria-current={activeSection === link.id ? "page" : undefined}
-                            className={`py-3 text-body font-medium border-b border-muted/20 last:border-0 transition-colors duration-200 ${
-                                activeSection === link.id
-                                    ? "text-blue-electric"
-                                    : "text-text-muted hover:text-white"
-                            }`}
-                        >
-                            {link.text}
-                        </a>
-                    ))}
+                <div className="flex flex-col gap-1 px-gutter py-5">
+                    {links.map((link) => {
+                        const active = activeSection === link.id;
+                        return (
+                            <a
+                                key={link.id}
+                                href={`#${link.id}`}
+                                onClick={(e) => handleLinkClick(e, link.id)}
+                                aria-current={active ? "page" : undefined}
+                                className={`border-b border-white/5 py-3 text-lead font-medium transition-colors duration-[var(--motion-quick)] last:border-0 ${
+                                    active ? "text-ink" : "text-ink-mute hover:text-ink"
+                                }`}
+                            >
+                                {link.text}
+                            </a>
+                        );
+                    })}
                     <a
                         href="#contacto"
                         onClick={(e) => handleLinkClick(e, "contacto")}
-                        className="mt-3 text-center px-5 py-3 rounded-full text-body font-semibold bg-blue-raven hover:bg-blue-electric transition-colors duration-300"
+                        className="mt-4 rounded-pill bg-ink px-6 py-3 text-center text-copy font-semibold text-plume-0 transition-colors duration-[var(--motion-quick)] hover:bg-iris hover:text-plume-0"
                     >
                         Contáctanos
                     </a>
