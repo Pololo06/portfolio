@@ -25,6 +25,16 @@
     --radius-modal:  38px;
     --radius-badge:  29.5px;
 
+    /* ── Avatares del equipo (fuente única para grid y modal) ── */
+    --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);   
+    --size-avatar-card-md: 6.5rem;                        
+    --size-avatar-card-lg: 9rem;                          
+    --size-avatar-modal-sm: 5.5rem;                       
+    --size-avatar-modal-md: 8rem;                         
+
+    /* ── Padding vertical de sección (reemplaza py-[Npx] sueltos por componente) ── */
+    --spacing-section: clamp(4.5rem, 3.2rem + 5.5vw, 8rem);
+
     --animate-slide-up:   slide-up 0.3s ease-out;
     --animate-slide-left: slide-left 0.3s ease-out;
     --animate-pop:        pop 0.25s ease-in-out;
@@ -32,10 +42,12 @@
     --text-tbig-title: 8rem;
     --text-big-title-v: 5rem;
     --text-title: 4rem;
+    --text-title-mobile: 2.5rem;
     --text-page-title: 1.65rem;
-    --text-subtitle: 1.30rem;
-    --text-body: 1.15rem;
-    --text-small: 0.875rem;
+    --text-subtitle: 1.6rem;
+    --text-body: 1.32rem;
+    --text-body2: 1.05rem;
+    --text-small: 0.885rem;
     --text-tiny: 0.75rem;
 
     --color-text-primary:   #FFFFFF;
