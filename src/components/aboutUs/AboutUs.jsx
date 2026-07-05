@@ -37,7 +37,7 @@ export default function AboutUs() {
   }, [selectedMember]);
 
   return (
-    <section id="nosotros" className="w-full py-section overflow-hidden scroll-mt-20">
+    <section id="nosotros" className="w-full py-section overflow-hidden scroll-mt-20 bg-plume-1">
       <div ref={ref} className="mx-auto max-w-6xl px-6 flex flex-col items-center">
 
         {/* ── Eyebrow ── */}

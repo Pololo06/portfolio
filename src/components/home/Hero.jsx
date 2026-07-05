@@ -25,7 +25,7 @@ export default function Hero(){
     }, [isVisible]);
 
     return(
-        <section id="inicio" className="relative w-full overflow-hidden scroll-mt-20 py-section">
+        <section id="inicio" className="relative w-full overflow-hidden scroll-mt-20 py-section bg-plume-0">
 
             <div ref={ref} className={`w-full max-w-5xl lg:max-w-none min-h-[35vh] sm:min-h-[90vh] flex flex-col items-start justify-start gap-0 relative mx-auto lg:mx-0 px-6 sm:px-10 lg:px-17 transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
                 

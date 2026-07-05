@@ -1,44 +1,109 @@
 @import "tailwindcss";
 
+/* ════════════════════════════════════════════════════════════════
+   PLUMA NEGRA — Sistema de diseño de Ravenmind (Fase 1)
+   Reglas completas: src/shared/PLUMA-NEGRA.md
+
+   Resumen de reglas (leer antes de usar cualquier token):
+   1. MATERIAL — El sitio se construye con 4 negros (plume-0..3).
+      Cada sección vive en UN material; secciones adyacentes nunca
+      comparten tono. El cambio de sección se percibe por cambio de
+      material, no por bordes ni separadores.
+   2. ACENTO — `iris` SOLO puede usarse en estados interactivos:
+      hover, focus, active, selección de texto y el link activo del
+      nav. Nunca en fondos, decoración, glows ni texto estático.
+   3. TINTA — Texto solo con ink / ink-dim / ink-mute. Los tres
+      cumplen AA (≥4.5:1) sobre el material más claro (plume-3).
+   4. MOTION — Toda animación usa las duraciones y curvas nombradas,
+      se dispara UNA sola vez, y desaparece por completo bajo
+      prefers-reduced-motion (media query al final del archivo).
+   ════════════════════════════════════════════════════════════════ */
+
 @theme {
-    /* ── Colores de marca ── */
-    --color-black:       #0F0F0F;
-    --color-black-soft:  #1A1A1A;
-    --color-surface:     #1C1F21;
-    --color-muted:       #484848;
-    --color-border:      #999999;
+    /* ── Materiales (negros del plumaje) ── */
+    --color-plume-0: #0A0A0B;   /* el más profundo — hero y contacto */
+    --color-plume-1: #111113;
+    --color-plume-2: #17171A;
+    --color-plume-3: #1E1E22;   /* el más claro — superficies elevadas */
 
-    --color-blue-raven: #00349E;
-    --color-blue-electric: #00A3FF;
-    --color-blue-mid:   #007AD7;
-    --color-blue-dark:  #001E5A;
-    --color-blue-deep:  #00143E;
+    /* ── Tinta (texto) ── */
+    --color-ink:      #FAFAFA;  /* titulares y cuerpo principal */
+    --color-ink-dim:  #C7C7CC;  /* cuerpo secundario */
+    --color-ink-mute: #9B9BA1;  /* metadata y labels — 4.6:1 sobre plume-3 */
 
-    --color-white-soft: #F8F9FA;
+    /* ── Acento iridiscente (SOLO interacción — regla 2) ── */
+    --color-iris:      #00A3FF;
+    --color-iris-deep: #00349E; /* capa de color del tratamiento duotono */
 
     /* ── Tipografía ── */
-    --font-sans: "Geist", serif;
-    --font-title: "Anton", serif;
-    --font-nav: "JetBrains Mono", serif;
+    /* Archivo variable (ejes wdth 62–125 / wght 100–900): display y titulares.
+       Geist: cuerpo. El ancho expandido se aplica con font-stretch (ver
+       .type-display más abajo), no con tracking. */
+    --font-display: "Archivo", "Arial Narrow", sans-serif;
+    --font-sans: "Geist", system-ui, sans-serif;
 
+    /* ── Escala tipográfica fluida ── */
+    --text-display:  clamp(3.25rem, 1.75rem + 9.5vw, 10rem);  /* wordmark / hero */
+    --text-headline: clamp(2.25rem, 1.6rem + 3.4vw, 4.25rem); /* h2 de sección */
+    --text-title-lg: clamp(1.375rem, 1.2rem + 1vw, 2rem);     /* h3 / subtítulos */
+    --text-lead:     clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem); /* párrafo destacado */
+    --text-copy:     1.0625rem;  /* cuerpo estándar */
+    --text-note:     0.9375rem;  /* secundario */
+    --text-caption:  0.8125rem;  /* labels y metadata */
+
+    /* ── Espaciado ── */
+    --spacing-section: clamp(6rem, 4rem + 6vw, 10rem); /* padding vertical de sección */
+    --spacing-stack:   clamp(2.5rem, 2rem + 2vw, 4rem); /* separación entre bloques internos */
+    --spacing-gutter:  clamp(1.5rem, 1rem + 2.5vw, 4rem); /* margen lateral de página */
+
+    /* ── Radios ── */
+    --radius-sharp: 2px;   /* default del sistema: casi recto */
+    --radius-soft:  10px;  /* superficies grandes (modal, form) */
+    --radius-pill:  999px; /* solo controles tipo píldora */
+
+    /* ── Motion: curvas nombradas ── */
+    --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);  /* entradas: desacelera y asienta */
+    --ease-lift:   cubic-bezier(0.32, 0, 0.67, 0);  /* salidas: acelera al irse */
+    --ease-hold:   cubic-bezier(0.65, 0, 0.35, 1);  /* cambios de estado in-place */
+
+    /* ── Motion: duraciones (usar con duration-[var(--motion-*)]) ── */
+    --motion-quick: 150ms;  /* microinteracción: hover, focus */
+    --motion-base:  300ms;  /* cambios de estado: acordeón, menú */
+    --motion-enter: 600ms;  /* reveals de entrada — una sola vez */
+
+    /* ════════════════════════════════════════════════════════════
+       DEPRECATED — Capa de compatibilidad (se elimina en Fase 7).
+       Tokens del sistema anterior que los componentes aún referencian.
+       Los alias apuntan al sistema nuevo donde es posible; ningún
+       componente nuevo puede usar estos nombres.
+       ════════════════════════════════════════════════════════════ */
+    --color-black:       #0A0A0B;   /* → plume-0 */
+    --color-black-soft:  #17171A;   /* → plume-2 */
+    --color-surface:     #1C1F21;
+    --color-muted:       #484848;   /* solo bordes/fondos — NUNCA texto (falla AA) */
+    --color-border:      #999999;
+    --color-blue-raven:  #00349E;   /* → iris-deep */
+    --color-blue-electric: #00A3FF; /* → iris */
+    --color-blue-mid:    #007AD7;
+    --color-blue-dark:   #001E5A;
+    --color-blue-deep:   #00143E;
+    --color-white-soft:  #F8F9FA;   /* → ink */
+    --color-text-primary:   #FFFFFF;
+    --color-text-secondary: #F8F9FA;
+    --color-text-muted:     #9B9BA1; /* re-mapeado a ink-mute: era #999999 */
+    --color-text-subtle:    #484848;
+    --color-text-disabled:  #2E2E2E;
+    --color-text-inverse:   #0A0A0B;
+    --font-title: "Archivo", "Arial Narrow", sans-serif; /* era Anton */
+    --font-nav: "Geist", system-ui, sans-serif;          /* era JetBrains Mono */
     --radius-card:   20px;
     --radius-modal:  38px;
     --radius-badge:  29.5px;
-
-    /* ── Avatares del equipo (fuente única para grid y modal) ── */
-    --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);   
-    --size-avatar-card-md: 6.5rem;                        
-    --size-avatar-card-lg: 9rem;                          
-    --size-avatar-modal-sm: 5.5rem;                       
-    --size-avatar-modal-md: 8rem;                         
-
-    /* ── Padding vertical de sección (reemplaza py-[Npx] sueltos por componente) ── */
-    --spacing-section: clamp(6rem, 4rem + 6vw, 10rem);
-
-    --animate-slide-up:   slide-up 0.3s ease-out;
-    --animate-slide-left: slide-left 0.3s ease-out;
-    --animate-pop:        pop 0.25s ease-in-out;
-
+    --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);
+    --size-avatar-card-md: 6.5rem;
+    --size-avatar-card-lg: 9rem;
+    --size-avatar-modal-sm: 5.5rem;
+    --size-avatar-modal-md: 8rem;
     --text-tbig-title: 8rem;
     --text-big-title-v: 5rem;
     --text-title: 4rem;
@@ -49,80 +114,40 @@
     --text-body2: 1.05rem;
     --text-small: 0.885rem;
     --text-tiny: 0.75rem;
-
-    --color-text-primary:   #FFFFFF;
-    --color-text-secondary: #F8F9FA;
-    --color-text-muted:     #999999;
-    --color-text-subtle:    #484848;
-    --color-text-disabled:  #2E2E2E;
-    --color-text-inverse:   #0F0F0F;
-
+    --animate-slide-up:   slide-up 0.3s ease-out;
+    --animate-slide-left: slide-left 0.3s ease-out;
+    --animate-pop:        pop 0.25s ease-in-out;
     --animate-floating: floating 3s ease-in-out infinite;
     --animate-reveal-card: reveal-card 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    --animate-neon: neon 3s ease-in-out infinite;
     --animate-fade-in: fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-fast: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-slow: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    /* --animate-neon eliminado: glow prohibido por la lista negra */
 }
 
-@keyframes floating{
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
-    100% {
-        transform: translateY(0px);
-    }
+/* ── Keyframes legacy (se depuran junto con la capa DEPRECATED) ── */
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0px); }
 }
 
 @keyframes reveal-card {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+
 @keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-
-@keyframes neon{
-    0%{
-        filter: drop-shadow(0 0 8px rgba(0, 52, 158, 0.6)) drop-shadow(0 0 20px rgba(0, 52, 158, 0.4));
-    }
-    50%{
-        filter: drop-shadow(0 0 15px rgba(0, 122, 215, 0.9)) drop-shadow(0 0 35px rgba(0, 52, 158, 0.6)); 
-    }
-    100%{
-        filter: drop-shadow(0 0 8px rgba(0, 52, 158, 0.6)) drop-shadow(0 0 20px rgba(0, 52, 158, 0.4)); 
-
-    }
-}
-
-/* ── Aplicar fuente a TODO globalmente ── */
 @layer base {
     * {
         margin: 0;
@@ -136,7 +161,98 @@
 
     body {
         @apply font-sans;
-        background-color: var(--color-black);
-        overflow-x: hidden;
+        background-color: var(--color-plume-0);
+        color: var(--color-ink);
+    }
+
+    /* Regla 2 — iridiscencia en microinteracciones globales */
+    ::selection {
+        background-color: var(--color-iris);
+        color: var(--color-plume-0);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-iris);
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    /* ── Dispositivo firma: tipografía display expandida ──
+       Archivo estirada al 125% de ancho, pesada y con tracking
+       negativo. Es la voz de los titulares del sitio. */
+    .type-display {
+        font-family: var(--font-display);
+        font-stretch: 125%;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 0.92;
+    }
+
+    .type-headline {
+        font-family: var(--font-display);
+        font-stretch: 112%;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.05;
+    }
+
+    /* ── Dispositivo firma: tratamiento duotono de imagen ──
+       Toda fotografía del sitio pasa por este material: B/N con
+       una capa de azul profundo fundida por color. Rectangular,
+       sin bordes de color, sin glow. Al hover, la iridiscencia
+       sube (la foto "gira hacia la luz", como el plumaje). */
+    .tone-media {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+    }
+
+    .tone-media > img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%) contrast(1.06) brightness(0.92);
+        transition: filter var(--motion-base) var(--ease-hold);
+    }
+
+    .tone-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: var(--color-iris-deep);
+        mix-blend-mode: color;
+        opacity: 0.85;
+        pointer-events: none;
+        transition: opacity var(--motion-base) var(--ease-hold);
+    }
+
+    .tone-media:hover > img,
+    .group:hover .tone-media > img {
+        filter: grayscale(100%) contrast(1.1) brightness(1);
+    }
+
+    .tone-media:hover::after,
+    .group:hover .tone-media::after {
+        opacity: 0.55;
+    }
+}
+
+/* ── Regla 4: bajo reduced-motion, el sitio es completamente
+   estático. Cubre animaciones, transiciones y smooth scroll de
+   TODOS los componentes, presentes y futuros. ── */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

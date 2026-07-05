@@ -42,7 +42,7 @@ export default function Contact() {
     };
 
     return (
-        <section id="contacto" className="relative bg-black text-white py-section overflow-hidden scroll-mt-20">
+        <section id="contacto" className="relative bg-plume-0 text-white py-section overflow-hidden scroll-mt-20">
 
             {/* ── Fondos decorativos ── */}
             <div className="pointer-events-none absolute inset-0 z-0">

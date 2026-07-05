@@ -6,7 +6,7 @@ export default function Experience() {
     const { ref, isVisible } = useScrollReveal();
 
     return (
-        <section id="experiencia" className="w-full py-section relative overflow-hidden scroll-mt-20">
+        <section id="experiencia" className="w-full py-section relative overflow-hidden scroll-mt-20 bg-plume-2">
 
             {/* Fondo decorativo */}
             <div className="pointer-events-none absolute inset-0 z-0">
