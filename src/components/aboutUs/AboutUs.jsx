@@ -5,7 +5,7 @@ import santiago from "../../assets/other/santiago.jpeg";
 import lucas from "../../assets/other/lucas.jpeg";
 import berdugo from "../../assets/other/berdugo.jpeg"
 import ContactMethod from "../contact/ContactMethod.jsx";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { faGithub, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,6 +22,19 @@ const members = [
 export default function AboutUs() {
   const [selectedMember, setSelectedMember] = useState(null);
   const { ref, isVisible } = useScrollReveal();
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!selectedMember) return;
+
+    closeButtonRef.current?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedMember(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [selectedMember]);
 
   return (
     <section id="nosotros" className="w-full py-24 overflow-hidden">
@@ -96,61 +109,72 @@ export default function AboutUs() {
 
 
       {/* ── Modal ── */}
-      <div
-        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500 ${selectedMember ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setSelectedMember(null)}
-      >
+      {selectedMember && (
         <div
-          className={`relative flex flex-col md:flex-row items-center gap-10 bg-black-soft/90 border border-muted/30 rounded-card p-10 md:p-14 w-full max-w-3xl mx-6 transition-all duration-500 ${selectedMember ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}
-          style={{ boxShadow: "0 0 60px rgba(0,52,158,0.25), inset 0 1px 0 rgba(255,255,255,0.04)" }}
-          onClick={(e) => e.stopPropagation()}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in"
+          onClick={() => setSelectedMember(null)}
+          role="presentation"
         >
-    
           <div
-            className="absolute top-0 left-10 right-10 h-px"
-            style={{ background: "linear-gradient(to right, transparent, #00349E, #00A3FF, #00349E, transparent)" }}
-          />
-
-          <button
-            onClick={() => setSelectedMember(null)}
-            className="absolute top-4 right-5 text-text-muted hover:text-white transition-colors duration-200 cursor-pointer"
-            aria-label="Cerrar"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="team-modal-name"
+            className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-10 bg-black-soft/90 border border-muted/30 rounded-card p-4 sm:p-10 md:p-14 w-full max-w-3xl mx-4 sm:mx-6 max-h-[85vh] overflow-y-auto animate-reveal-card"
+            style={{ boxShadow: "0 0 60px rgba(0,52,158,0.25), inset 0 1px 0 rgba(255,255,255,0.04)" }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <FontAwesomeIcon icon={faXmark} style={{ fontSize: "1.4rem" }} />
-          </button>
 
-          <div className="shrink-0 flex flex-col items-center gap-4">
-            <img
-              src={selectedMember?.photo}
-              alt={selectedMember?.name}
-              className="size-40 rounded-full border-4 border-blue-raven object-cover animate-floating shadow-[0_0_30px_6px_rgba(0,52,158,0.5)]"
+            <div
+              className="absolute top-0 left-10 right-10 h-px"
+              style={{ background: "linear-gradient(to right, transparent, #00349E, #00A3FF, #00349E, transparent)" }}
             />
 
-            <div className="flex items-center gap-3">
-              <ContactMethod icon={faInstagram} href={selectedMember?.instagram} setState={() => {}} />
-              <ContactMethod icon={faGithub} href={selectedMember?.git} setState={() => {}} />
-              {selectedMember?.linkedin && (
-                <ContactMethod icon={faLinkedin} href={selectedMember?.linkedin} setState={() => {}} />
-              )}
-            </div>
-          </div>
+            <button
+              ref={closeButtonRef}
+              onClick={() => setSelectedMember(null)}
+              className="absolute top-4 right-5 text-text-muted hover:text-white transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric rounded-full"
+              aria-label="Cerrar"
+            >
+              <FontAwesomeIcon icon={faXmark} style={{ fontSize: "1.4rem" }} />
+            </button>
 
-          <div className="flex flex-col gap-3 text-white">
-            <div>
-              <h3 className="text-page-title font-bold">
-                {selectedMember?.name}
-              </h3>
-              <span className="text-subtitle text-blue-electric font-medium">
-                {selectedMember?.role}
-              </span>
-            </div>
-            <p className="text-body text-text-muted leading-relaxed text-justify">
-              {selectedMember?.description}
-            </p>
-          </div>
+            <div className="shrink-0 flex flex-col items-center gap-4">
+              <img
+                src={selectedMember?.photo}
+                alt={selectedMember?.name}
+                width={128}
+                height={128}
+                loading="lazy"
+                decoding="async"
+                className="size-40 rounded-full border-4 border-blue-raven object-cover animate-floating shadow-[0_0_30px_6px_rgba(0,52,158,0.5)]"
+              />
 
+              <div className="flex items-center gap-3">
+                <ContactMethod icon={faInstagram} href={selectedMember?.instagram} />
+                <ContactMethod icon={faGithub} href={selectedMember?.git} />
+                {selectedMember?.linkedin && (
+                  <ContactMethod icon={faLinkedin} href={selectedMember?.linkedin} />
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 text-white">
+              <div>
+                <h3 id="team-modal-name" className="text-body sm:text-page-title font-bold">
+                  {selectedMember?.name}
+                </h3>
+                <span className="text-small sm:text-subtitle text-blue-electric font-medium">
+                  {selectedMember?.role}
+                </span>
+              </div>
+              <p className="text-small sm:text-body text-text-muted leading-relaxed text-justify">
+                {selectedMember?.description}
+              </p>
+            </div>
+
+          </div>
         </div>
-      </div>
+      )}
 
     </section>
   );
