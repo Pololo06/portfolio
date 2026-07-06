@@ -60,7 +60,7 @@ export default function Experience() {
                 {/* ── Cabecera de sección ── */}
                 <div
                     ref={ref}
-                    className={`mb-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
+                    className={`mb-12 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                 >

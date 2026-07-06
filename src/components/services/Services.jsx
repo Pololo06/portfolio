@@ -92,10 +92,10 @@ export default function Services() {
     <section className="w-full relative overflow-hidden scroll-mt-20 py-section bg-plume-1" id="servicios">
       <div className="mx-auto max-w-[110rem] px-gutter">
 
-        {/* ── Cabecera de sección: asimétrica, alineada al margen ── */}
+        {/* ── Cabecera de sección: alineada al margen ── */}
         <div
           ref={ref}
-          className={`mb-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
+          className={`mb-12 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >

@@ -41,12 +41,9 @@ export default function Contact() {
         <section id="contacto" className="relative w-full py-section overflow-hidden scroll-mt-20 bg-plume-0">
             <div ref={ref} className="mx-auto max-w-[110rem] px-gutter">
 
-                {/* ── Cabecera de sección ──
-                     Mobile: la etiqueta actúa de antetítulo sobre el headline,
-                     todo alineado a la izquierda. Desktop: fila asimétrica
-                     como en el resto de secciones. */}
+                {/* ── Cabecera de sección: alineada al margen ── */}
                 <div
-                    className={`mb-12 flex flex-col-reverse items-start gap-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-x-8 sm:gap-y-3 ${
+                    className={`mb-12 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                 >
