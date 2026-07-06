@@ -1,22 +1,22 @@
 import { useId } from "react";
 
-export default function TextArea({label,placeholder,value,onChange,required = false,}) {
+export default function TextArea({ label, placeholder, value, onChange, required = false }) {
     const id = useId();
     return (
         <div>
-            <label htmlFor={id} className="block text-small mb-2">
+            <label htmlFor={id} className="mb-2 block text-caption uppercase tracking-[0.18em] text-ink-mute">
                 {label}{required && <span aria-hidden="true"> *</span>}
             </label>
 
             <textarea
                 id={id}
-                rows={5}
+                rows={4}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
                 required={required}
                 aria-required={required}
-                className="w-full bg-transparent border border-muted rounded-2xl px-4 py-3 resize-none text-small outline-none focus:border-blue-mid"
+                className="w-full resize-none rounded-none border-0 border-b border-white/15 bg-transparent px-0 py-3 text-copy text-ink outline-none transition-colors duration-[var(--motion-quick)] placeholder:text-ink-mute/60 focus:border-iris user-invalid:border-alert"
             />
         </div>
     );

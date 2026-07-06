@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function ContactMethod({ title, icon, href, setState }) {
+/* Link de contacto/red con ícono. Si no hay `title` visible, pasar
+   `label` para el nombre accesible (links de solo ícono). */
+export default function ContactMethod({ title, icon, href, label }) {
     const isExternal = href?.startsWith("http");
 
     return (
@@ -8,17 +10,11 @@ export default function ContactMethod({ title, icon, href, setState }) {
             href={href}
             target={isExternal ? "_blank" : "_self"}
             rel={isExternal ? "noreferrer" : undefined}
-            className="flex flex-row text-white items-center gap-2 sm:gap-1 cursor-pointer transition-all hover:scale-110 hover:text-blue-raven w-full sm:w-auto"
-            onMouseEnter={() => setState?.(true)}
-            onMouseLeave={() => setState?.(false)}
+            aria-label={title ? undefined : label}
+            className="inline-flex items-center gap-2 text-ink-dim transition-colors duration-[var(--motion-quick)] hover:text-iris focus-visible:text-iris"
         >
-            <div className="flex items-center justify-center leading-none text-[32px] sm:text-[42px] lg:text-[48px]">
-                <FontAwesomeIcon icon={icon} />
-            </div>
-
-            <span className="text-body2 sm:text-small">
-                {title}
-            </span>
+            <FontAwesomeIcon icon={icon} className="text-2xl" />
+            {title && <span className="text-copy font-medium">{title}</span>}
         </a>
     );
 }

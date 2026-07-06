@@ -35,6 +35,9 @@
     --color-iris:      #00A3FF;
     --color-iris-deep: #00349E; /* capa de color del tratamiento duotono */
 
+    /* ── Alerta (SOLO estados de error de formulario) ── */
+    --color-alert: #FF6B6B;
+
     /* ── Tipografía ── */
     /* Archivo variable (ejes wdth 62–125 / wght 100–900): display y titulares.
        Geist: cuerpo. El ancho expandido se aplica con font-stretch (ver

@@ -162,10 +162,10 @@ export default function AboutUs() {
               </div>
 
               <div className="flex items-center gap-3">
-                <ContactMethod icon={faInstagram} href={selectedMember.instagram} />
-                <ContactMethod icon={faGithub} href={selectedMember.git} />
+                <ContactMethod icon={faInstagram} href={selectedMember.instagram} label={`Instagram de ${selectedMember.name}`} />
+                <ContactMethod icon={faGithub} href={selectedMember.git} label={`GitHub de ${selectedMember.name}`} />
                 {selectedMember.linkedin && (
-                  <ContactMethod icon={faLinkedin} href={selectedMember.linkedin} />
+                  <ContactMethod icon={faLinkedin} href={selectedMember.linkedin} label={`LinkedIn de ${selectedMember.name}`} />
                 )}
               </div>
             </div>

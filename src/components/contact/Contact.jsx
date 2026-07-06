@@ -1,29 +1,15 @@
-import ContactMethod from "./ContactMethod";
 import InputText from "./InputText";
 import TextArea from "./TextArea";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPaperPlane, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import useScrollReveal from "../../hooks/useScrollReveal";
 
-function InfoRow({ icon, label, children }) {
-    return (
-        <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-raven/20 flex items-center justify-center text-blue-electric shrink-0">
-                <FontAwesomeIcon icon={icon} />
-            </div>
-            <div>
-                <span className="block text-small text-text-muted mb-0.5">{label}</span>
-                {children}
-            </div>
-        </div>
-    );
-}
+const contactInfo = [
+    { label: "Email", value: "ravenmind.dev@gmail.com", href: "mailto:ravenmind.dev@gmail.com" },
+    { label: "WhatsApp", value: "+57 317 514 0183", href: "https://wa.me/573175140183?text=Hola, estoy interesado en sus servicios." },
+    { label: "Ubicación", value: "Colombia / Remoto worldwide" },
+];
 
 export default function Contact() {
-    const [isVisibleW, setIsVisibleW] = useState(false);
-    const [isVisibleM, setIsVisibleM] = useState(false);
     const { ref, isVisible } = useScrollReveal();
 
     const [form, setForm] = useState({ empresa: "", correo: "", idea: "", requerimientos: "" });
@@ -42,95 +28,70 @@ export default function Contact() {
     };
 
     return (
-        <section id="contacto" className="relative bg-plume-0 text-white py-section overflow-hidden scroll-mt-20">
+        <section id="contacto" className="relative w-full py-section overflow-hidden scroll-mt-20 bg-plume-0">
+            <div ref={ref} className="mx-auto max-w-[110rem] px-gutter">
 
-            {/* ── Fondos decorativos ── */}
-            <div className="pointer-events-none absolute inset-0 z-0">
-                <div className="absolute -top-40 -left-40 w-150 h-150 rounded-full opacity-10 blur-3xl bg-blue-raven" />
-                <div className="absolute -bottom-40 -right-40 w-125 h-125 rounded-full opacity-10 blur-3xl bg-blue-electric" />
-
-                <div className={`absolute top-22 left-4 transition-opacity duration-700 ${isVisibleW ? "opacity-[0.06]" : "opacity-0"}`}>
-                    <FontAwesomeIcon icon={faWhatsapp} className="text-[14rem] sm:text-[20rem] lg:text-[28rem]" />
-                </div>
-                <div className={`absolute top-22 right-4 transition-opacity duration-700 ${isVisibleM ? "opacity-[0.06]" : "opacity-0"}`}>
-                    <FontAwesomeIcon icon={faEnvelope} className="text-[14rem] sm:text-[20rem] lg:text-[28rem]" />
-                </div>
-            </div>
-
-            {/* ── Contenido ── */}
-            <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="h-px w-12 bg-blue-electric opacity-50" />
-                    <span className="text-small font-semibold tracking-widest uppercase text-blue-electric">
-                        Hablemos
+                {/* ── Cabecera de sección ── */}
+                <div
+                    className={`mb-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
+                        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                    }`}
+                >
+                    <h2 className="type-headline text-headline text-ink">
+                        ¿Tienes una idea en mente?
+                    </h2>
+                    <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
+                        Contacto
                     </span>
-                    <div className="h-px w-12 bg-blue-electric opacity-50" />
                 </div>
 
-                <h2 className="text-title-mobile lg:text-big-title-v font-title tracking-wide font-bold text-center font-display leading-none mb-4">
-                    ¿Tienes{" "}
-                    <span className="text-blue-electric">una idea</span>
-                    <br />
-                    en mente?
-                </h2>
+                <div
+                    className={`grid gap-12 transition-[opacity,transform] delay-100 duration-[var(--motion-enter)] ease-[var(--ease-settle)] lg:grid-cols-12 lg:gap-16 ${
+                        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                    }`}
+                >
 
-                <p className="text-body text-center text-text-muted leading-relaxed max-w-2xl mx-auto mb-16 sm:mb-14">
-                    Cuéntanos sobre tu proyecto. Estamos listos para diseñar y desarrollar
-                    la plataforma web que tu empresa necesita para crecer.
-                </p>
+                    {/* ── Contacto directo ── */}
+                    <div className="flex flex-col gap-10 lg:col-span-5">
+                        <p className="max-w-md text-lead leading-snug text-ink-dim">
+                            Cuéntanos sobre tu proyecto. Respondemos en minutos,
+                            por correo o WhatsApp.
+                        </p>
 
-                <div className={`grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 mt-8 transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-
-                    {/* ── Info de contacto ── */}
-                    <div className="lg:col-span-2 flex flex-col gap-12 sm:gap-14">
-                        <div>
-                            <h3 className="text-page-title font-semibold text-white-soft mb-6 sm:mb-4 text-center sm:text-left">Contacto directo</h3>
-                            <p className="text-body2 text-white/60 leading-relaxed text-center sm:text-justify">
-                                Prefieres hablar directamente? Escríbenos por WhatsApp o envíanos un correo. Respondemos en minutos.
-                            </p>
-                        </div>
-
-                        <div className="flex justify-center">
-                            <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-center sm:gap-16">
-                                <ContactMethod
-                                title="WhatsApp"
-                                icon={faWhatsapp}
-                                href="https://wa.me/573175140183?text=Hola, estoy interesado en sus servicios."
-                                setState={setIsVisibleW}
-                            />
-                            <ContactMethod
-                                title="Mail"
-                                icon={faEnvelope}
-                                href="mailto:ravenmind.dev@gmail.com?subject=Consulta desde el Portafolio.&body=Hola, estoy interesado en sus servicios."
-                                setState={setIsVisibleM}
-                            />
-                            </div>
-                        </div>
-
-                        <div className="rounded-2xl bg-black-soft/75 backdrop-blur-md border border-muted/20 p-6 space-y-4">
-                            <InfoRow icon={faEnvelope} label="Email">
-                                <a href="mailto:ravenmind.dev@gmail.com" className="text-white hover:text-blue-electric transition-colors">ravenmind.dev@gmail.com</a>
-                            </InfoRow>
-                            <InfoRow icon={faWhatsapp} label="Teléfono">
-                                <a href="https://wa.me/573175140183" className="text-white hover:text-blue-electric transition-colors">+57 317 514 0183</a>
-                            </InfoRow>
-                            <InfoRow icon={faLocationDot} label="Ubicación">
-                                <span className="text-white">Colombia / Remoto worldwide</span>
-                            </InfoRow>
-                        </div>
+                        <dl className="divide-y divide-white/10">
+                            {contactInfo.map(({ label, value, href }) => (
+                                <div key={label} className="flex flex-col gap-1 py-5 first:pt-0 last:pb-0">
+                                    <dt className="text-caption uppercase tracking-[0.18em] text-ink-mute">
+                                        {label}
+                                    </dt>
+                                    <dd>
+                                        {href ? (
+                                            <a
+                                                href={href}
+                                                target={href.startsWith("http") ? "_blank" : undefined}
+                                                rel={href.startsWith("http") ? "noreferrer" : undefined}
+                                                className="text-copy text-ink transition-colors duration-[var(--motion-quick)] hover:text-iris focus-visible:text-iris"
+                                            >
+                                                {value}
+                                            </a>
+                                        ) : (
+                                            <span className="text-copy text-ink">{value}</span>
+                                        )}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
                     </div>
 
                     {/* ── Formulario ── */}
-                    <div className="lg:col-span-3">
-                        <div className="relative rounded-2xl bg-black-soft/75 backdrop-blur-md border border-muted/20 p-6 sm:p-8 md:p-10 overflow-hidden"
-                            style={{ boxShadow: "0 0 60px rgba(0,52,158,0.12), inset 0 1px 0 rgba(255,255,255,0.04)" }}
-                        >
-                            <div className="absolute top-0 left-10 right-10 h-px bg-blue-electric" />
+                    <div className="lg:col-span-7">
+                        <div className="rounded-soft bg-plume-2 p-6 sm:p-10">
+                            <h3 className="type-headline text-title-lg text-ink">Contacto empresarial</h3>
+                            <p className="mb-10 mt-2 text-note text-ink-mute">
+                                Cuéntanos los detalles y te responderemos lo antes posible.
+                            </p>
 
-                            <h3 className="text-page-title font-semibold text-white-soft mb-4">Contacto empresarial</h3>
-                            <p className="text-body2 text-text-muted mb-10 sm:mb-8">Cuéntanos los detalles y te responderemos lo antes posible.</p>
-
-                            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-6">
+                            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-8 md:grid-cols-2">
                                 <InputText
                                     label="Nombre de empresa o proyecto"
                                     type="text"
@@ -164,17 +125,21 @@ export default function Contact() {
                                     onChange={onChange("requerimientos")}
                                 />
 
-                                <div className="md:col-span-2 flex justify-center mt-2">
+                                <div className="flex flex-wrap items-center justify-between gap-4 md:col-span-2">
+                                    {/* Honestidad sobre el submit: es un mailto, nada se
+                                        envía desde la página */}
+                                    <p className="max-w-sm text-caption leading-relaxed text-ink-mute">
+                                        El botón abre tu aplicación de correo con el mensaje
+                                        ya redactado; nada se envía desde esta página.
+                                    </p>
                                     <button
                                         type="submit"
-                                        className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-blue-raven hover:bg-blue-electric px-5 sm:px-10 py-2.5 sm:py-5 rounded-full text-body2 sm:text-body font-semibold transition-all duration-300 hover:-translate-y-0.5 mx-auto"
-                                        style={{ boxShadow: "0 4px 24px rgba(0,163,255,0.2)" }}
+                                        className="group inline-flex cursor-pointer items-center gap-2 rounded-pill bg-ink px-8 py-3 text-copy font-semibold text-plume-0 transition-colors duration-[var(--motion-quick)] hover:bg-iris"
                                     >
-                                        <FontAwesomeIcon
-                                            icon={faPaperPlane}
-                                            className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                                        />
-                                        Enviar solicitud
+                                        Redactar correo
+                                        <span aria-hidden="true" className="transition-transform duration-[var(--motion-quick)] group-hover:translate-x-1">
+                                            →
+                                        </span>
                                     </button>
                                 </div>
                             </form>
