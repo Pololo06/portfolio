@@ -5,7 +5,6 @@ export default function NavBar() {
     const [activeSection, setActiveSection] = useState("inicio");
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const navRef = useRef(null);
     const menuRef = useRef(null);
     const closeBtnRef = useRef(null);
 
@@ -66,20 +65,26 @@ export default function NavBar() {
         if (sectionId && window.innerWidth < 768) {
             e.preventDefault();
             const menuEl = menuRef.current;
-            if (menuEl) {
-                const onTransitionEnd = () => {
-                    scrollToSection(sectionId);
-                    menuEl.removeEventListener("transitionend", onTransitionEnd);
-                };
-                menuEl.addEventListener("transitionend", onTransitionEnd);
-            }
+            /* Esperamos a que el overlay termine de cerrarse antes de hacer
+               scroll. transitionend es la señal principal; el timeout es un
+               respaldo por si el evento no llega (p.ej. reduced-motion, donde
+               la transición puede durar 0ms y no emitirse). Guardamos con
+               `done` para no navegar dos veces. */
+            let done = false;
+            const go = () => {
+                if (done) return;
+                done = true;
+                menuEl?.removeEventListener("transitionend", go);
+                scrollToSection(sectionId);
+            };
+            menuEl?.addEventListener("transitionend", go);
+            setTimeout(go, 360);
         }
     };
 
     return (
         <>
         <nav
-            ref={navRef}
             className={`enter-nav sticky top-0 z-50 w-full text-ink transition-colors duration-[var(--motion-base)] ${
                 scrolled ? "bg-plume-0" : "bg-transparent"
             }`}

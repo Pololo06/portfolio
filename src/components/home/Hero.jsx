@@ -1,22 +1,11 @@
 import { useState } from "react";
-import samuel from "../../assets/other/samuel.jpeg";
-import juan from "../../assets/other/farelo.png";
-import santiago from "../../assets/other/santiago.jpeg";
-import lucas from "../../assets/other/lucas.jpeg";
-import berdugo from "../../assets/other/berdugo.jpeg";
+import { team } from "../../data/team";
 import AmbientVideo from "../media/AmbientVideo";
 
 /* Franja duotono: los 5 ingenieros reales como material grafico del hero.
    Se presentan con nombre en la seccion Nosotros; aca son plumaje.
    Cuando existan los retratos vivos (public/videos/README.md) cada celda
    pasa de foto a video automaticamente. */
-const team = [
-    { src: samuel, video: "/videos/retrato-samuel.mp4", position: "50% 30%" },
-    { src: juan, video: "/videos/retrato-juan.mp4", position: "50% 25%" },
-    { src: santiago, video: "/videos/retrato-santiago.mp4", position: "50% 30%" },
-    { src: lucas, video: "/videos/retrato-lucas.mp4", position: "50% 25%" },
-    { src: berdugo, video: "/videos/retrato-berdugo.mp4", position: "50% 30%" },
-];
 
 export default function Hero() {
     /* Click/tap sobre un retrato: fija su color original (tone-on).
@@ -48,7 +37,7 @@ export default function Hero() {
                     </span>
 
                     <span aria-hidden="true" className="grid grid-cols-5 gap-1 sm:gap-1.5">
-                        {team.map(({ src, video, position }, i) => {
+                        {team.map(({ photo, video, position }, i) => {
                             const sweep = i % 2 ? "enter-sweep-up" : "enter-sweep-down";
                             return (
                                 <span
@@ -60,7 +49,7 @@ export default function Hero() {
                                     style={{ "--stagger": `${240 + i * 90}ms` }}
                                 >
                                     <img
-                                        src={src}
+                                        src={photo}
                                         alt=""
                                         loading="lazy"
                                         decoding="async"
