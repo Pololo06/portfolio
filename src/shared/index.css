@@ -148,6 +148,25 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Coreografía de entrada (sistema nuevo) ──
+   Barridos dentro de máscaras overflow-hidden: el elemento entra
+   deslizándose hasta su posición final. Stagger por elemento vía
+   --stagger. Un solo disparo; reduced-motion los congela al final. */
+@keyframes sweep-in-down {
+    from { transform: translateY(-104%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes sweep-in-up {
+    from { transform: translateY(104%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes rise-in {
+    from { transform: translateY(112%); }
+    to   { transform: translateY(0); }
+}
+
 @layer base {
     * {
         margin: 0;
@@ -178,6 +197,29 @@
 }
 
 @layer components {
+    /* ── Coreografía de entrada: clases de un solo disparo ──
+       Usar dentro de un contenedor overflow-hidden (sweep/rise).
+       El retraso se controla con style={{ "--stagger": "240ms" }}. */
+    .enter-sweep-down {
+        animation: sweep-in-down 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-sweep-up {
+        animation: sweep-in-up 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-rise {
+        animation: rise-in 800ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-fade {
+        animation: fade-in 700ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
     /* ── Dispositivo firma: tipografía display expandida ──
        Archivo estirada al 125% de ancho, pesada y con tracking
        negativo. Es la voz de los titulares del sitio. */

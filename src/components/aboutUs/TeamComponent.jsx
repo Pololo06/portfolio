@@ -1,45 +1,73 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import useScrollReveal from "../../hooks/useScrollReveal";
+import AmbientVideo from "../media/AmbientVideo";
 
-const durations = [500, 700, 900, 1100];
+/* Retrato del equipo — misma idea que la franja del hero, a gran formato.
+   En reposo: duotono anonimo. Hover/focus (o siempre, en tactil): el
+   retrato recupera su color original y revela nombre, rol y redes.
+   El click abre la ficha completa (bio) en el modal de AboutUs. */
+export default function TeamComponent({ member, onClick, index = 0 }) {
+  const { ref, isVisible } = useScrollReveal({ delay: index * 100 });
 
-export default function TeamComponent({ name, role, photo, onClick, index = 0 }) {
-  const { ref, isVisible } = useScrollReveal({ delay: index * 150 });
-  const duration = durations[index] || 700;
+  const socials = [
+    { icon: faGithub, href: member.git, label: `GitHub de ${member.name}` },
+    { icon: faInstagram, href: member.instagram, label: `Instagram de ${member.name}` },
+    { icon: faLinkedin, href: member.linkedin, label: `LinkedIn de ${member.name}` },
+  ].filter((s) => s.href);
 
   return (
-    <button
-      type="button"
+    <div
       ref={ref}
-      className={`group flex flex-col items-center gap-2 sm:gap-3 cursor-pointer min-w-0 w-full text-center transition-[opacity,transform] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-2xl ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-      style={{ transitionDuration: `${duration}ms` }}
-      onClick={onClick}
-      aria-label={`Ver más sobre ${name}, ${role}`}
+      className={`tone-reveal group relative aspect-[3/4] w-full overflow-hidden transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : `${index % 2 ? "translate-y-10" : "-translate-y-10"} opacity-0`
+      }`}
     >
-
-      <div className="relative shrink-0">
+      <div className="tone-media absolute inset-0">
         <img
-          src={photo}
+          src={member.photo}
           alt=""
           width={144}
           height={144}
           loading="lazy"
           decoding="async"
-          className="size-[var(--size-avatar-card-sm)] sm:size-[var(--size-avatar-card-md)] lg:size-[var(--size-avatar-card-lg)] rounded-full border-4 border-blue-raven object-cover transition-all duration-500 group-hover:scale-105 group-hover:border-blue-electric shadow-[0_0_40px_6px_rgba(0,52,158,0.8)] group-hover:shadow-[0_0_55px_10px_rgba(0,163,255,0.5)]"
+          style={{ objectPosition: "50% 25%" }}
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-full flex items-center justify-center bg-blue-deep/60 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"
-        >
-          <span className="text-small font-semibold text-white tracking-wide">Ver más</span>
-        </div>
+        {member.video && <AmbientVideo src={member.video} className="absolute inset-0" />}
       </div>
 
-      <h4 className="text-white-soft text-small sm:text-page-title font-bold text-balance group-hover:text-blue-electric transition-colors duration-300">
-        {name}
-      </h4>
-      <span className="text-small sm:text-body text-text-muted leading-none">
-        {role}
-      </span>
-    </button>
+      {/* Click principal — abre la ficha completa en el modal */}
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`Ver más sobre ${member.name}, ${member.role}`}
+        className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none"
+      />
+
+      {/* Info revelada: en táctil siempre visible; en desktop aparece con
+          hover / focus junto con el color original del retrato */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col gap-1 bg-gradient-to-t from-plume-0/95 via-plume-0/55 to-transparent p-4 pt-12 transition-[opacity,transform] duration-[var(--motion-base)] ease-[var(--ease-hold)] lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-within:translate-y-0 lg:group-focus-within:opacity-100">
+        <h3 className="type-headline text-title-lg text-ink">{member.name}</h3>
+        <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
+          {member.role}
+        </span>
+        <div className="pointer-events-auto mt-2 flex gap-4">
+          {socials.map(({ icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={label}
+              className="text-ink-mute transition-colors duration-[var(--motion-quick)] hover:text-iris focus-visible:text-iris"
+            >
+              <FontAwesomeIcon icon={icon} />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
