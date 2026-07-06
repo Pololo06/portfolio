@@ -208,7 +208,8 @@
         overflow: hidden;
     }
 
-    .tone-media > img {
+    .tone-media > img,
+    .tone-media > video {
         display: block;
         width: 100%;
         height: 100%;
@@ -229,13 +230,30 @@
     }
 
     .tone-media:hover > img,
-    .group:hover .tone-media > img {
+    .group:hover .tone-media > img,
+    .tone-media:hover > video,
+    .group:hover .tone-media > video {
         filter: grayscale(100%) contrast(1.1) brightness(1);
     }
 
     .tone-media:hover::after,
     .group:hover .tone-media::after {
         opacity: 0.55;
+    }
+
+    /* Estado revelado: la foto/video "gira hacia la luz" y recupera su
+       color original por completo (AboutUs, retratos vivos). Se activa
+       con hover/focus del contenedor .tone-reveal. */
+    .tone-reveal:hover .tone-media > img,
+    .tone-reveal:focus-within .tone-media > img,
+    .tone-reveal:hover .tone-media > video,
+    .tone-reveal:focus-within .tone-media > video {
+        filter: grayscale(0%) contrast(1) brightness(1);
+    }
+
+    .tone-reveal:hover .tone-media::after,
+    .tone-reveal:focus-within .tone-media::after {
+        opacity: 0;
     }
 }
 

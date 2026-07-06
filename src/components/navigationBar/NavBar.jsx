@@ -11,7 +11,7 @@ export default function NavBar() {
     const links = [
         { id: "inicio", text: "Inicio" },
         { id: "servicios", text: "Servicios" },
-        { id: "experiencia", text: "Experiencia" },
+        { id: "experiencia", text: "Proceso" },
         { id: "nosotros", text: "Nosotros" },
         { id: "contacto", text: "Contacto" },
     ];
