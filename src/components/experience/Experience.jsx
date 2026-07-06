@@ -64,10 +64,7 @@ export default function Experience() {
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                 >
-                    <h2 className="type-headline text-headline text-ink">Cómo trabajamos</h2>
-                    <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
-                        Proceso — 04
-                    </span>
+                    <h2 className="type-headline text-headline text-ink">¿Cómo trabajamos?</h2>
                 </div>
 
                 {/* ── Intro + video de proceso | pasos ── */}

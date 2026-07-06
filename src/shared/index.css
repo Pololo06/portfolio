@@ -100,6 +100,25 @@
     to   { transform: translateY(0); }
 }
 
+/* ── Entrada de la barra de navegación y su logo (independientes) ──
+   La barra desciende desde fuera del viewport; el logo aparece por su
+   cuenta con un leve retardo, no arrastrado por la barra. */
+@keyframes nav-enter {
+    from { opacity: 0; transform: translateY(-100%); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes logo-enter {
+    from { opacity: 0; transform: translateY(-0.4rem) scale(0.94); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Entrada del modal de ficha: sube y se asienta con escala ── */
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(1.75rem) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @layer base {
     * {
         margin: 0;
@@ -151,6 +170,22 @@
     .enter-fade {
         animation: fade-in 700ms var(--ease-settle) both;
         animation-delay: var(--stagger, 0ms);
+    }
+
+    /* ── Entradas independientes de la barra y su logo (un disparo al
+         montar). Duraciones y curvas del sistema (regla 4). ── */
+    .enter-nav {
+        animation: nav-enter var(--motion-enter) var(--ease-settle) both;
+    }
+
+    .enter-logo {
+        animation: logo-enter var(--motion-enter) var(--ease-settle) both;
+        animation-delay: 180ms;
+    }
+
+    /* ── Entrada del modal: se dispara cada vez que se abre la ficha ── */
+    .enter-modal {
+        animation: modal-in var(--motion-enter) var(--ease-settle) both;
     }
 
     /* ── Dispositivo firma: tipografía display expandida ──
@@ -217,17 +252,21 @@
     }
 
     /* Estado revelado: la foto/video "gira hacia la luz" y recupera su
-       color original por completo (AboutUs, retratos vivos). Se activa
-       con hover/focus del contenedor .tone-reveal. */
+       color original por completo (hero, AboutUs, retratos vivos).
+       Se activa con hover/focus del contenedor .tone-reveal, o del
+       propio elemento cuando .tone-reveal convive con .tone-media. */
     .tone-reveal:hover .tone-media > img,
     .tone-reveal:focus-within .tone-media > img,
     .tone-reveal:hover .tone-media > video,
-    .tone-reveal:focus-within .tone-media > video {
+    .tone-reveal:focus-within .tone-media > video,
+    .tone-media.tone-reveal:hover > img,
+    .tone-media.tone-reveal:hover > video {
         filter: grayscale(0%) contrast(1) brightness(1);
     }
 
     .tone-reveal:hover .tone-media::after,
-    .tone-reveal:focus-within .tone-media::after {
+    .tone-reveal:focus-within .tone-media::after,
+    .tone-media.tone-reveal:hover::after {
         opacity: 0;
     }
 

@@ -4,11 +4,24 @@ import useScrollReveal from "../../hooks/useScrollReveal";
 import AmbientVideo from "../media/AmbientVideo";
 
 /* Retrato del equipo — misma idea que la franja del hero, a gran formato.
-   En reposo: duotono anonimo. Hover/focus (o siempre, en tactil): el
-   retrato recupera su color original y revela nombre, rol y redes.
-   El click abre la ficha completa (bio) en el modal de AboutUs. */
+   Entra igual que en el hero: barrido dentro de la máscara .tone-media,
+   alternando arriba/abajo con stagger por retrato.
+   A diferencia del hero, aquí el retrato vive siempre en su color
+   original (tone-on fijo): en Nosotros las personas se presentan, no
+   son plumaje. Hover/focus (o siempre, en tactil) revela nombre, rol
+   y redes. El click abre la ficha completa (bio) en el modal. */
 export default function TeamComponent({ member, onClick, index = 0 }) {
-  const { ref, isVisible } = useScrollReveal({ delay: index * 100 });
+  const { ref, isVisible } = useScrollReveal();
+
+  /* Antes de entrar al viewport el retrato queda fuera de la máscara;
+     al ser visible arranca el mismo barrido del hero. */
+  const sweep = isVisible
+    ? index % 2
+      ? "enter-sweep-up"
+      : "enter-sweep-down"
+    : index % 2
+      ? "translate-y-[104%]"
+      : "-translate-y-[104%]";
 
   const socials = [
     { icon: faGithub, href: member.git, label: `GitHub de ${member.name}` },
@@ -19,13 +32,10 @@ export default function TeamComponent({ member, onClick, index = 0 }) {
   return (
     <div
       ref={ref}
-      className={`tone-reveal group relative aspect-[3/4] w-full overflow-hidden transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] ${
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : `${index % 2 ? "translate-y-10" : "-translate-y-10"} opacity-0`
-      }`}
+      className="tone-reveal group relative aspect-[3/4] w-full overflow-hidden"
+      style={{ "--stagger": `${index * 90}ms` }}
     >
-      <div className="tone-media absolute inset-0">
+      <div className="tone-media tone-on absolute inset-0">
         <img
           src={member.photo}
           alt=""
@@ -33,9 +43,10 @@ export default function TeamComponent({ member, onClick, index = 0 }) {
           height={144}
           loading="lazy"
           decoding="async"
+          className={sweep}
           style={{ objectPosition: "50% 25%" }}
         />
-        {member.video && <AmbientVideo src={member.video} className="absolute inset-0" />}
+        {member.video && <AmbientVideo src={member.video} className={`absolute inset-0 ${sweep}`} />}
       </div>
 
       {/* Click principal — abre la ficha completa en el modal */}
@@ -48,7 +59,11 @@ export default function TeamComponent({ member, onClick, index = 0 }) {
 
       {/* Info revelada: en táctil siempre visible; en desktop aparece con
           hover / focus junto con el color original del retrato */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col gap-1 bg-gradient-to-t from-plume-0/95 via-plume-0/55 to-transparent p-4 pt-12 transition-[opacity,transform] duration-[var(--motion-base)] ease-[var(--ease-hold)] lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-within:translate-y-0 lg:group-focus-within:opacity-100">
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col gap-1 bg-gradient-to-t from-plume-0/95 via-plume-0/55 to-transparent p-4 pt-12 transition-[opacity,transform] duration-[var(--motion-base)] ease-[var(--ease-hold)] lg:translate-y-3 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-within:translate-y-0 lg:group-focus-within:opacity-100 ${
+          isVisible ? "lg:opacity-0" : "opacity-0"
+        }`}
+      >
         <h3 className="type-headline text-title-lg text-ink">{member.name}</h3>
         <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
           {member.role}

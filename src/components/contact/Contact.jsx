@@ -15,34 +15,44 @@ export default function Contact() {
     const [form, setForm] = useState({ empresa: "", correo: "", idea: "", requerimientos: "" });
     const onChange = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
+    /* Dos canales de salida con el mismo mensaje: WhatsApp como principal
+       (funciona en cualquier dispositivo, sin cliente de correo configurado)
+       y mailto como alternativa. El botón pulsado decide el canal. */
     const handleSubmit = (e) => {
         e.preventDefault();
+        const channel = e.nativeEvent.submitter?.value || "whatsapp";
         const { empresa, correo, idea, requerimientos } = form;
-        const subject = encodeURIComponent(`Consulta de ${empresa || "cliente"}`);
-        const body = encodeURIComponent(
-            `Empresa/Proyecto: ${empresa}\nCorreo: ${correo}\n\nIdea de proyecto:\n${idea}\n\nRequerimientos adicionales:\n${requerimientos}`
-        );
-        window.open(`mailto:ravenmind.dev@gmail.com?subject=${subject}&body=${body}`, "_blank");
-        // No limpiamos el formulario automáticamente: mailto: no confirma que el usuario
-        // realmente haya enviado el correo (puede cancelar la ventana del cliente de mail).
+        const message =
+            `Empresa/Proyecto: ${empresa}\nCorreo: ${correo}\n\nIdea de proyecto:\n${idea}` +
+            (requerimientos ? `\n\nRequerimientos adicionales:\n${requerimientos}` : "");
+
+        if (channel === "email") {
+            const subject = encodeURIComponent(`Consulta de ${empresa || "cliente"}`);
+            window.open(`mailto:ravenmind.dev@gmail.com?subject=${subject}&body=${encodeURIComponent(message)}`, "_blank");
+        } else {
+            const text = encodeURIComponent(`Hola, les escribo desde su web.\n\n${message}`);
+            window.open(`https://wa.me/573175140183?text=${text}`, "_blank", "noopener");
+        }
+        // No limpiamos el formulario automáticamente: ni wa.me ni mailto:
+        // confirman que el mensaje realmente se haya enviado.
     };
 
     return (
         <section id="contacto" className="relative w-full py-section overflow-hidden scroll-mt-20 bg-plume-0">
             <div ref={ref} className="mx-auto max-w-[110rem] px-gutter">
 
-                {/* ── Cabecera de sección ── */}
+                {/* ── Cabecera de sección ──
+                     Mobile: la etiqueta actúa de antetítulo sobre el headline,
+                     todo alineado a la izquierda. Desktop: fila asimétrica
+                     como en el resto de secciones. */}
                 <div
-                    className={`mb-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 ${
+                    className={`mb-12 flex flex-col-reverse items-start gap-3 transition-[opacity,transform] duration-[var(--motion-enter)] ease-[var(--ease-settle)] sm:mb-16 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-x-8 sm:gap-y-3 ${
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                 >
                     <h2 className="type-headline text-headline text-ink">
                         ¿Tienes una idea en mente?
                     </h2>
-                    <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
-                        Contacto
-                    </span>
                 </div>
 
                 <div
@@ -85,7 +95,7 @@ export default function Contact() {
 
                     {/* ── Formulario ── */}
                     <div className="lg:col-span-7">
-                        <div className="rounded-soft bg-plume-2 p-6 sm:p-10">
+                        <div className="max-w-2xl rounded-soft bg-plume-2 p-6 sm:p-8">
                             <h3 className="type-headline text-title-lg text-ink">Contacto empresarial</h3>
                             <p className="mb-10 mt-2 text-note text-ink-mute">
                                 Cuéntanos los detalles y te responderemos lo antes posible.
@@ -125,21 +135,27 @@ export default function Contact() {
                                     onChange={onChange("requerimientos")}
                                 />
 
-                                <div className="flex flex-wrap items-center justify-between gap-4 md:col-span-2">
-                                    {/* Honestidad sobre el submit: es un mailto, nada se
-                                        envía desde la página */}
-                                    <p className="max-w-sm text-caption leading-relaxed text-ink-mute">
-                                        El botón abre tu aplicación de correo con el mensaje
-                                        ya redactado; nada se envía desde esta página.
-                                    </p>
+                                {/* Mobile: botones a ancho completo apilados.
+                                    Desktop: fila con WhatsApp como acción principal. */}
+                                <div className="mt-2 flex flex-col gap-3 md:col-span-2 md:mt-0 md:flex-row md:items-center md:gap-4">
                                     <button
                                         type="submit"
-                                        className="group inline-flex cursor-pointer items-center gap-2 rounded-pill bg-ink px-8 py-3 text-copy font-semibold text-plume-0 transition-colors duration-[var(--motion-quick)] hover:bg-iris"
+                                        name="channel"
+                                        value="whatsapp"
+                                        className="group inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-pill bg-ink px-8 py-3.5 text-copy font-semibold text-plume-0 transition-colors duration-[var(--motion-quick)] hover:bg-iris md:w-auto md:py-3"
                                     >
-                                        Redactar correo
+                                        Enviar por WhatsApp
                                         <span aria-hidden="true" className="transition-transform duration-[var(--motion-quick)] group-hover:translate-x-1">
                                             →
                                         </span>
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        name="channel"
+                                        value="email"
+                                        className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-pill border border-white/20 px-8 py-3.5 text-copy font-semibold text-ink transition-colors duration-[var(--motion-quick)] hover:border-iris hover:text-iris md:w-auto md:py-3"
+                                    >
+                                        Enviar por correo
                                     </button>
                                 </div>
                             </form>

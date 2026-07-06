@@ -102,9 +102,6 @@ export default function Services() {
           <h2 className="type-headline text-headline text-ink">
             ¿Qué ofrecemos?
           </h2>
-          <span className="text-caption uppercase tracking-[0.18em] text-ink-mute">
-            Servicios — 04
-          </span>
         </div>
 
         {/* ── Índice de servicios ── */}

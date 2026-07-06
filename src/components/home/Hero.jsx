@@ -1,3 +1,4 @@
+import { useState } from "react";
 import samuel from "../../assets/other/samuel.jpeg";
 import juan from "../../assets/other/farelo.png";
 import santiago from "../../assets/other/santiago.jpeg";
@@ -18,19 +19,20 @@ const team = [
 ];
 
 export default function Hero() {
+    /* Click/tap sobre un retrato: fija su color original (tone-on).
+       Otro click lo devuelve al duotono. */
+    const [litCells, setLitCells] = useState(() => new Set());
+    const toggleCell = (i) =>
+        setLitCells((prev) => {
+            const next = new Set(prev);
+            if (next.has(i)) next.delete(i);
+            else next.add(i);
+            return next;
+        });
+
     return (
         <section id="inicio" className="relative w-full overflow-hidden scroll-mt-20 bg-plume-0">
             <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-[110rem] flex-col justify-between gap-10 px-gutter pb-12 pt-6 lg:min-h-[calc(100svh-6rem)] lg:pt-10">
-
-                {/* ── Meta del estudio (entra al final de la coreografía) ── */}
-                <div
-                    className="enter-fade flex items-baseline justify-between gap-4 text-caption uppercase tracking-[0.18em] text-ink-mute"
-                    style={{ "--stagger": "700ms" }}
-                >
-                    <span>Estudio de software</span>
-                    <span className="hidden sm:inline">Cartagena — Colombia</span>
-                    <span aria-label="Cinco ingenieros">5 ingenieros</span>
-                </div>
 
                 {/* ── Wordmark escalonado + franja: el hero se ARMA al cargar ──
                      RAVEN emerge de su máscara, los retratos barren alternando
@@ -51,7 +53,10 @@ export default function Hero() {
                             return (
                                 <span
                                     key={i}
-                                    className="tone-media block h-[clamp(4.5rem,15vw,11rem)]"
+                                    onClick={() => toggleCell(i)}
+                                    className={`tone-media tone-reveal block h-[clamp(4.5rem,15vw,11rem)] cursor-pointer ${
+                                        litCells.has(i) ? "tone-on" : ""
+                                    }`}
                                     style={{ "--stagger": `${240 + i * 90}ms` }}
                                 >
                                     <img
@@ -101,12 +106,6 @@ export default function Hero() {
                             <span aria-hidden="true" className="transition-transform duration-[var(--motion-quick)] group-hover:translate-x-1">
                                 →
                             </span>
-                        </a>
-                        <a
-                            href="#servicios"
-                            className="text-note text-ink-mute underline decoration-transparent underline-offset-4 transition-colors duration-[var(--motion-quick)] hover:text-ink hover:decoration-iris"
-                        >
-                            Ver servicios
                         </a>
                     </div>
                 </div>

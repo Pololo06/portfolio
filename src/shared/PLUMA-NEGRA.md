@@ -77,7 +77,7 @@ controles píldora). Los radios legacy (20/38/29.5px) mueren en Fase 7.
 
 ## Estado de migración
 
-- **Fase 1 (esta)**: tokens, materiales aplicados a las 6 superficies,
+- **Fase 1 (esta)**: tokens, materiales aplicados a las 6 superficies
   hook one-shot + reduced-motion, `::selection`/`:focus-visible` globales,
   Anton y JetBrains Mono fuera (Archivo + Geist), glow `neon` eliminado.
 - La capa `DEPRECATED` de `index.css` mantiene vivo el layout anterior
