@@ -74,81 +74,11 @@
     --motion-base:  300ms;  /* cambios de estado: acordeón, menú */
     --motion-enter: 600ms;  /* reveals de entrada — una sola vez */
 
-    /* ════════════════════════════════════════════════════════════
-       DEPRECATED — Capa de compatibilidad (se elimina en Fase 7).
-       Tokens del sistema anterior que los componentes aún referencian.
-       Los alias apuntan al sistema nuevo donde es posible; ningún
-       componente nuevo puede usar estos nombres.
-       ════════════════════════════════════════════════════════════ */
-    --color-black:       #0A0A0B;   /* → plume-0 */
-    --color-black-soft:  #17171A;   /* → plume-2 */
-    --color-surface:     #1C1F21;
-    --color-muted:       #484848;   /* solo bordes/fondos — NUNCA texto (falla AA) */
-    --color-border:      #999999;
-    --color-blue-raven:  #00349E;   /* → iris-deep */
-    --color-blue-electric: #00A3FF; /* → iris */
-    --color-blue-mid:    #007AD7;
-    --color-blue-dark:   #001E5A;
-    --color-blue-deep:   #00143E;
-    --color-white-soft:  #F8F9FA;   /* → ink */
-    --color-text-primary:   #FFFFFF;
-    --color-text-secondary: #F8F9FA;
-    --color-text-muted:     #9B9BA1; /* re-mapeado a ink-mute: era #999999 */
-    --color-text-subtle:    #484848;
-    --color-text-disabled:  #2E2E2E;
-    --color-text-inverse:   #0A0A0B;
-    --font-title: "Archivo", "Arial Narrow", sans-serif; /* era Anton */
-    --font-nav: "Geist", system-ui, sans-serif;          /* era JetBrains Mono */
-    --radius-card:   20px;
-    --radius-modal:  38px;
-    --radius-badge:  29.5px;
-    --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);
-    --size-avatar-card-md: 6.5rem;
-    --size-avatar-card-lg: 9rem;
-    --size-avatar-modal-sm: 5.5rem;
-    --size-avatar-modal-md: 8rem;
-    --text-tbig-title: 8rem;
-    --text-big-title-v: 5rem;
-    --text-title: 4rem;
-    --text-title-mobile: 2.5rem;
-    --text-page-title: 1.65rem;
-    --text-subtitle: 1.6rem;
-    --text-body: 1.2rem;
-    --text-body2: 1.05rem;
-    --text-small: 0.885rem;
-    --text-tiny: 0.75rem;
-    --animate-slide-up:   slide-up 0.3s ease-out;
-    --animate-slide-left: slide-left 0.3s ease-out;
-    --animate-pop:        pop 0.25s ease-in-out;
-    --animate-floating: floating 3s ease-in-out infinite;
-    --animate-reveal-card: reveal-card 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    --animate-fade-in: fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    --animate-fade-in-up-fast: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    --animate-fade-in-up-slow: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    /* --animate-neon eliminado: glow prohibido por la lista negra */
-}
-
-/* ── Keyframes legacy (se depuran junto con la capa DEPRECATED) ── */
-@keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes reveal-card {
-    from { opacity: 0; transform: translateY(40px) scale(0.95); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes fade-in {
     from { opacity: 0; }
     to   { opacity: 1; }
-}
-
-@keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Coreografía de entrada (sistema nuevo) ──
@@ -298,6 +228,17 @@
 
     .tone-reveal:hover .tone-media::after,
     .tone-reveal:focus-within .tone-media::after {
+        opacity: 0;
+    }
+
+    /* Revelado fijado: el retrato queda en su color original de forma
+       permanente (click en el hero, foto del modal de Nosotros). */
+    .tone-media.tone-on > img,
+    .tone-media.tone-on > video {
+        filter: grayscale(0%) contrast(1) brightness(1);
+    }
+
+    .tone-media.tone-on::after {
         opacity: 0;
     }
 }
