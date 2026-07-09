@@ -18,7 +18,7 @@ export default function Services() {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="w-full relative overflow-hidden scroll-mt-20 py-section" id="servicios">
+    <section className="w-full relative overflow-hidden scroll-mt-20 min-h-svh flex flex-col justify-center py-section" id="servicios">
 
       {/* Fondo decorativo */}
       <div className="pointer-events-none absolute inset-0 z-0">
@@ -43,7 +43,7 @@ export default function Services() {
         </h2>
 
         {/* Cards */}
-        <div className="w-full flex flex-col gap-4 mt-4">
+        <div className="w-full flex flex-col gap-vfit-2xs mt-vfit-xs">
           {myServices.map((service, key) => (
             <Card
               key={service.title}

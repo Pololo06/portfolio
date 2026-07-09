@@ -42,7 +42,7 @@ export default function Contact() {
     };
 
     return (
-        <section id="contacto" className="relative bg-black text-white py-section overflow-hidden scroll-mt-20">
+        <section id="contacto" className="relative bg-black text-white min-h-svh flex flex-col justify-center py-section overflow-hidden scroll-mt-20">
 
             {/* ── Fondos decorativos ── */}
             <div className="pointer-events-none absolute inset-0 z-0">
@@ -74,15 +74,15 @@ export default function Contact() {
                     en mente?
                 </h2>
 
-                <p className="text-body text-center text-text-muted leading-relaxed max-w-2xl mx-auto mb-16 sm:mb-14">
+                <p className="text-body text-center text-text-muted leading-relaxed max-w-2xl mx-auto mb-vfit-md">
                     Cuéntanos sobre tu proyecto. Estamos listos para diseñar y desarrollar
                     la plataforma web que tu empresa necesita para crecer.
                 </p>
 
-                <div className={`grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 mt-8 transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+                <div className={`grid grid-cols-1 lg:grid-cols-5 gap-vfit-md lg:gap-14 mt-vfit-xs transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
 
                     {/* ── Info de contacto ── */}
-                    <div className="lg:col-span-2 flex flex-col gap-12 sm:gap-14">
+                    <div className="lg:col-span-2 flex flex-col gap-vfit-md">
                         <div>
                             <h3 className="text-page-title font-semibold text-white-soft mb-6 sm:mb-4 text-center sm:text-left">Contacto directo</h3>
                             <p className="text-body2 text-white/60 leading-relaxed text-center sm:text-justify">
@@ -128,9 +128,9 @@ export default function Contact() {
                             <div className="absolute top-0 left-10 right-10 h-px bg-blue-electric" />
 
                             <h3 className="text-page-title font-semibold text-white-soft mb-4">Contacto empresarial</h3>
-                            <p className="text-body2 text-text-muted mb-10 sm:mb-8">Cuéntanos los detalles y te responderemos lo antes posible.</p>
+                            <p className="text-body2 text-text-muted mb-vfit-sm">Cuéntanos los detalles y te responderemos lo antes posible.</p>
 
-                            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-6">
+                            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-vfit-sm">
                                 <InputText
                                     label="Nombre de empresa o proyecto"
                                     type="text"
@@ -164,10 +164,10 @@ export default function Contact() {
                                     onChange={onChange("requerimientos")}
                                 />
 
-                                <div className="md:col-span-2 flex justify-center mt-2">
+                                <div className="md:col-span-2 flex justify-center">
                                     <button
                                         type="submit"
-                                        className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-blue-raven hover:bg-blue-electric px-5 sm:px-10 py-2.5 sm:py-5 rounded-full text-body2 sm:text-body font-semibold transition-all duration-300 hover:-translate-y-0.5 mx-auto"
+                                        className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-blue-raven hover:bg-blue-electric px-5 sm:px-10 py-vfit-xs rounded-full text-body2 sm:text-body font-semibold transition-all duration-300 hover:-translate-y-0.5 mx-auto"
                                         style={{ boxShadow: "0 4px 24px rgba(0,163,255,0.2)" }}
                                     >
                                         <FontAwesomeIcon
