@@ -10,7 +10,7 @@ import Footer from "../components/footer/Footer.jsx"
 function App() {
   return (
     <div>
-      {/* Skip to content — visible on focus for keyboard users */}
+      {/* Skip link (visible al enfocar) */}
       <a
         href="#inicio"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-raven focus:text-white focus:rounded-badge focus:font-semibold focus:shadow-lg focus:outline-none"

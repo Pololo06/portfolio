@@ -18,7 +18,7 @@ export default function Services() {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="w-full relative overflow-hidden scroll-mt-20 min-h-svh flex flex-col justify-center py-section" id="servicios">
+    <section className="section-fullscreen w-full relative" id="servicios">
 
       {/* Fondo decorativo */}
       <div className="pointer-events-none absolute inset-0 z-0">

@@ -75,11 +75,11 @@ export default function NavBar() {
                     : "bg-transparent backdrop-blur-sm"
             }`}
         >
-            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20 sm:h-20 lg:h-24">
+            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-14 sm:h-14 lg:h-16">
 
                 {/* ── Logo ── */}
                 <a href="#inicio" onClick={(e) => handleLinkClick(e, "inicio")}>
-                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className="h-16 sm:h-18 lg:h-22 w-auto" />
+                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className="h-11 sm:h-12 lg:h-15 w-auto" />
                 </a>
 
                 {/* ── Links desktop ── */}

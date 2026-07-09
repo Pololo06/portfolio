@@ -25,24 +25,20 @@
     --radius-modal:  38px;
     --radius-badge:  29.5px;
 
-    /* ── Avatares del equipo (fuente única para grid y modal) ── */
+    /* ── Avatares del equipo ── */
     --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);   
     --size-avatar-card-md: 6.5rem;                        
     --size-avatar-card-lg: 9rem;                          
     --size-avatar-modal-sm: 5.5rem;                       
     --size-avatar-modal-md: 8rem;                         
 
-    /* Breakpoint extra por debajo de sm: separa el móvil (franja) del resto
-       (grid). Móvil = pantallas < 576px. Genera el variant xs: (≥36rem/576px). */
+    /* Breakpoint xs (576px): móvil = franja; ≥xs = grid. */
     --breakpoint-xs: 36rem;
 
-    /* ── Padding vertical de sección (reemplaza py-[Npx] sueltos por componente) ── */
+    /* ── Padding vertical de sección ── */
     --spacing-section: clamp(6rem, 4rem + 6vw, 10rem);
 
-    /* ── Escala de espaciado vertical adaptada a la altura del viewport ──
-       Para secciones a min-h-svh: crece con la altura (a ≥1080px se ve
-       holgado) y se comprime en pantallas bajas sin desbordar.
-       Genera utilidades gap-/mt-/mb-/py- (p. ej. gap-vfit-md). */
+    /* ── Espaciado vertical fluido (vh) para secciones full-height ── */
     --spacing-vfit-2xs: clamp(0.4rem, 1.1vh, 0.85rem);
     --spacing-vfit-xs:  clamp(0.55rem, 1.5vh, 1.25rem);
     --spacing-vfit-sm:  clamp(0.75rem, 2vh, 1.5rem);
@@ -50,7 +46,7 @@
     --spacing-vfit-lg:  clamp(1.75rem, 4.5vh, 4.5rem);
     --spacing-vfit-xl:  clamp(2rem, 5vh, 5.5rem);
 
-    /* Altura del textarea del formulario, adaptada a la altura del viewport */
+    /* Alto del textarea, fluido con el viewport */
     --spacing-field-fit: clamp(3.75rem, 10vh, 7.5rem);
 
     --animate-slide-up:   slide-up 0.3s ease-out;
@@ -83,8 +79,7 @@
     --animate-fade-in-up-fast: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-slow: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
-    /* ── Pluma Negra: tokens añadidos para la sección Nosotros ──
-       (solo se agregan nombres nuevos; no se altera ningún valor previo) */
+    /* ── Tokens de la sección Nosotros ── */
 
     /* Escala tipográfica editorial fluida */
     --text-title-lg: clamp(1.375rem, 1.2rem + 1vw, 2rem);
@@ -92,7 +87,7 @@
     --text-copy:     1.0625rem;
     --text-caption:  0.8125rem;
 
-    /* Radio editorial (superficies grandes: modal, retratos) */
+    /* Radio editorial */
     --radius-soft: 10px;
 
     /* Motion: curvas y duraciones nombradas */
@@ -159,7 +154,7 @@
     }
 }
 
-/* ── Pluma Negra: coreografía de entrada (barridos dentro de máscaras) ── */
+/* ── Barridos de entrada (dentro de máscaras) ── */
 @keyframes sweep-in-down {
     from { transform: translateY(-104%); }
     to   { transform: translateY(0); }
@@ -175,7 +170,7 @@
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ── Aplicar fuente a TODO globalmente ── */
+/* ── Reset base ── */
 @layer base {
     * {
         margin: 0;
@@ -194,10 +189,9 @@
     }
 }
 
-/* ── Pluma Negra: utilidades de la sección Nosotros ── */
+/* ── Utilidades de la sección Nosotros ── */
 @layer components {
-    /* Coreografía de entrada: clases de un solo disparo. Usar dentro de un
-       contenedor overflow-hidden. El retraso se controla con --stagger. */
+    /* Entrada one-shot; el retraso se controla con --stagger. */
     .enter-sweep-down {
         animation: sweep-in-down 850ms var(--ease-settle) both;
         animation-delay: var(--stagger, 0ms);
@@ -217,15 +211,25 @@
         animation: modal-in var(--motion-enter) var(--ease-settle) both;
     }
 
-    /* Titular display: Anton condensada con tracking negativo y line-height
-       ajustado — la voz de los titulares de sección. */
+    /* Salida: barrido inverso; retrae el retrato por donde entró. */
+    .exit-sweep-up {
+        animation: sweep-in-down var(--motion-enter) var(--ease-hold) reverse both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .exit-sweep-down {
+        animation: sweep-in-up var(--motion-enter) var(--ease-hold) reverse both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    /* Titular display (Anton). */
     .type-headline {
         font-family: var(--font-title);
         letter-spacing: -0.01em;
         line-height: 1.05;
     }
 
-    /* Máscara de imagen: rectangular, recorte cover, sin bordes ni glow. */
+    /* Máscara de imagen (recorte cover). */
     .tone-media {
         position: relative;
         overflow: hidden;
@@ -237,13 +241,30 @@
         height: 100%;
         object-fit: cover;
     }
+
+    /* Punto focal de los retratos (hacia el rostro). */
+    .object-portrait {
+        object-position: 50% 25%;
+    }
+
+    /* Sección full-height: min-height (no recorta si el contenido excede) + centrado. */
+    .section-fullscreen {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-block: var(--spacing-section);
+        overflow: hidden;
+        scroll-margin-top: 5rem;
+    }
 }
 
-/* Bajo reduced-motion, las entradas nuevas quedan estáticas en su
-   posición final (regla de motion de Pluma Negra, acotada a estas clases). */
+/* Reduced-motion: entradas/salidas quedan estáticas. */
 @media (prefers-reduced-motion: reduce) {
     .enter-sweep-down,
     .enter-sweep-up,
+    .exit-sweep-down,
+    .exit-sweep-up,
     .enter-fade,
     .enter-modal {
         animation-duration: 0.01ms !important;

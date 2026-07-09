@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 export default function useScrollReveal({ threshold = 0.15, delay = 0 } = {}) {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  // Latch: true tras la primera entrada; permite animar la salida.
+  const [hasRevealed, setHasRevealed] = useState(false);
   const timeoutRef = useRef(null);
 
   useEffect(() => {
@@ -12,6 +14,7 @@ export default function useScrollReveal({ threshold = 0.15, delay = 0 } = {}) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          setHasRevealed(true);
           if (delay > 0) {
             timeoutRef.current = setTimeout(() => setIsVisible(true), delay);
           } else {
@@ -35,5 +38,5 @@ export default function useScrollReveal({ threshold = 0.15, delay = 0 } = {}) {
     };
   }, [delay, threshold]);
 
-  return { ref, isVisible };
+  return { ref, isVisible, hasRevealed };
 }

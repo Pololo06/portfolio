@@ -6,10 +6,10 @@ import lucas from "../../assets/other/lucas.jpeg";
 import berdugo from "../../assets/other/berdugo.jpeg";
 import ContactMethod from "../contact/ContactMethod.jsx";
 import { useEffect, useRef, useState } from "react";
-import { faGithub, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useScrollReveal from "../../hooks/useScrollReveal";
+import { getMemberSocials } from "./memberSocials";
 
 const members = [
   { name: "Samuel Polo", role: "Ing. Frontend", photo: samuel, description: "Entusiasta de aprender, me dedico al front end para demostrar mis habilidades en diseñar, crear e innovar páginas web. Otra de mis fortalezas es el trabajo en equipo ya que siempre busco tener dinámica con mi grupo de trabajo para mantener un ambiente laboral positivo y productivo.", instagram: 'https://www.instagram.com/saml_pol?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', git: 'https://github.com/Pololo06', linkedin: 'https://co.linkedin.com/in/samuel-polo-0382a9388' },
@@ -26,8 +26,7 @@ export default function AboutUs() {
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
 
-  /* Modal: foco inicial, focus-trap, Escape, scroll-lock y devolución
-     del foco al disparador al cerrar. */
+  /* Modal accesible: focus-trap, Escape, scroll-lock y devolución de foco. */
   useEffect(() => {
     if (!selectedMember) return;
 
@@ -71,10 +70,10 @@ export default function AboutUs() {
   };
 
   return (
-    <section id="nosotros" className="w-full min-h-svh flex flex-col justify-center py-section overflow-hidden scroll-mt-20">
+    <section id="nosotros" className="section-fullscreen w-full">
       <div className="mx-auto max-w-[90rem] px-6 w-full">
 
-        {/* ── Cabecera de sección (mismo patrón centrado que el resto del sitio) ── */}
+        {/* ── Cabecera ── */}
         <div ref={ref} className="flex flex-col items-center">
 
           {/* Eyebrow */}
@@ -97,8 +96,7 @@ export default function AboutUs() {
           </p>
         </div>
 
-        {/* ── Franja del equipo. Celular estrecho (<xs): strip horizontal con
-             snap. Desde xs (≥480px): fila de 5, igual que desktop. ── */}
+        {/* ── Franja del equipo: strip con snap en móvil, fila de 5 desde xs (≥576px) ── */}
         <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-3 xs:grid xs:grid-cols-5 xs:gap-2 xs:overflow-visible xs:pb-0">
           {members.map((member, i) => (
             <div key={member.name} className="min-w-[56vw] snap-center xs:min-w-0">
@@ -150,7 +148,7 @@ export default function AboutUs() {
 
             <div className="grid gap-8 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-12">
 
-              {/* Columna del retrato — centrada en mobile, alineada en desktop */}
+              {/* Columna del retrato */}
               <div
                 className="enter-fade flex flex-col items-center gap-6 md:items-start"
                 style={{ "--stagger": "140ms" }}
@@ -163,16 +161,14 @@ export default function AboutUs() {
                     height={300}
                     loading="lazy"
                     decoding="async"
-                    style={{ objectPosition: "50% 25%" }}
+                    className="object-portrait"
                   />
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <ContactMethod icon={faInstagram} href={selectedMember.instagram} />
-                  <ContactMethod icon={faGithub} href={selectedMember.git} />
-                  {selectedMember.linkedin && (
-                    <ContactMethod icon={faLinkedin} href={selectedMember.linkedin} />
-                  )}
+                  {getMemberSocials(selectedMember).map(({ key, icon, href }) => (
+                    <ContactMethod key={key} icon={icon} href={href} />
+                  ))}
                 </div>
               </div>
 

@@ -37,12 +37,11 @@ export default function Contact() {
             `Empresa/Proyecto: ${empresa}\nCorreo: ${correo}\n\nIdea de proyecto:\n${idea}\n\nRequerimientos adicionales:\n${requerimientos}`
         );
         window.open(`mailto:ravenmind.dev@gmail.com?subject=${subject}&body=${body}`, "_blank");
-        // No limpiamos el formulario automáticamente: mailto: no confirma que el usuario
-        // realmente haya enviado el correo (puede cancelar la ventana del cliente de mail).
+        // No limpiamos el form: mailto no confirma envío (el usuario puede cancelar).
     };
 
     return (
-        <section id="contacto" className="relative bg-black text-white min-h-svh flex flex-col justify-center py-section overflow-hidden scroll-mt-20">
+        <section id="contacto" className="section-fullscreen relative bg-black text-white">
 
             {/* ── Fondos decorativos ── */}
             <div className="pointer-events-none absolute inset-0 z-0">
