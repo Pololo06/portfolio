@@ -25,14 +25,12 @@
     --radius-modal:  38px;
     --radius-badge:  29.5px;
 
-    /* ── Avatares del equipo (fuente única para grid y modal) ── */
     --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);   
     --size-avatar-card-md: 6.5rem;                        
     --size-avatar-card-lg: 9rem;                          
     --size-avatar-modal-sm: 5.5rem;                       
     --size-avatar-modal-md: 8rem;                         
 
-    /* ── Padding vertical de sección (reemplaza py-[Npx] sueltos por componente) ── */
     --spacing-section: clamp(6rem, 4rem + 6vw, 10rem);
 
     --animate-slide-up:   slide-up 0.3s ease-out;
@@ -40,12 +38,12 @@
     --animate-pop:        pop 0.25s ease-in-out;
 
     --text-tbig-title: 8rem;
-    --text-big-title-v: 5rem;
+    --text-big-title-v: 4.7rem;
     --text-title: 4rem;
     --text-title-mobile: 2.5rem;
     --text-page-title: 1.65rem;
     --text-subtitle: 1.6rem;
-    --text-body: 1.2rem;
+    --text-body: 1.3rem;
     --text-body2: 1.05rem;
     --text-small: 0.885rem;
     --text-tiny: 0.75rem;
@@ -58,8 +56,15 @@
     --color-text-inverse:   #0F0F0F;
 
     --animate-floating: floating 3s ease-in-out infinite;
+    --animate-floating-2: floating 2s ease-in-out infinite;
     --animate-reveal-card: reveal-card 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-neon: neon 3s ease-in-out infinite;
+    --animate-blob-glow: blob-glow 3s ease-in-out infinite;
+    --animate-blob-glow-2: blob-glow-2 5s ease-in-out infinite;
+
+    --animate-spotlight-pulse: spotlight-pulse 5s ease-in-out infinite;
+    --animate-platform-glow: platform-glow 4s ease-in-out infinite;
+
     --animate-fade-in: fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-fast: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -76,6 +81,27 @@
     100% {
         transform: translateY(0px);
     }
+}
+@keyframes floating-2{
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-100px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes spotlight-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.08); }
+}
+
+@keyframes platform-glow {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1;   }
 }
 
 @keyframes reveal-card {
@@ -119,6 +145,29 @@
     100%{
         filter: drop-shadow(0 0 8px rgba(0, 52, 158, 0.6)) drop-shadow(0 0 20px rgba(0, 52, 158, 0.4)); 
 
+    }
+}
+
+@keyframes blob-glow {
+    0% {
+        opacity: 0.35;
+    }
+    50% {
+        opacity: 0.90;
+    }
+    100% {
+        opacity: 0.35;
+    }
+}
+@keyframes blob-glow-2 {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.20;
+    }
+    100% {
+        opacity: 0;
     }
 }
 

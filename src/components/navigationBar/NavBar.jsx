@@ -3,8 +3,9 @@ import logo from "../../assets/logo/alternative-2-wb.png";
 
 export default function NavBar() {
     const [activeSection, setActiveSection] = useState("inicio");
-    const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [onHover, setOnHover] = useState("inicio");
+    const [scrolled, setScrolled] = useState(false);
     const navRef = useRef(null);
     const menuRef = useRef(null);
 
@@ -16,7 +17,6 @@ export default function NavBar() {
         { id: "contacto", text: "Contacto" },
     ];
 
-    /* ── Detectar sección activa ── */
     useEffect(() => {
         const sections = document.querySelectorAll("section[id]");
         const observer = new IntersectionObserver(
@@ -31,14 +31,35 @@ export default function NavBar() {
         return () => observer.disconnect();
     }, []);
 
-    /* ── Detectar scroll para el fondo ── */
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 20);
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
+    const lastScrollY= useRef(0);
+    const acumulatedScrollY= useRef(0);
+    useEffect(()=>{
 
-    /* ── Bloquear scroll del body cuando el menú mobile está abierto ── */
+        
+
+        const handleScroll = () =>{
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY.current;
+
+            if(scrollDelta>0){
+                acumulatedScrollY.current+=scrollDelta;
+                if(acumulatedScrollY.current>300){
+                    setScrolled(true);
+                    acumulatedScrollY.current=0;
+                }
+            }else if (scrollDelta<0){
+                acumulatedScrollY.current=0;
+                setScrolled(false);
+            }
+            lastScrollY.current=currentScrollY;
+        }
+
+        window.addEventListener('scroll',handleScroll);
+        return () => (
+            window.removeEventListener('scroll',handleScroll)
+        )
+    },[]);
+
     useEffect(() => {
         document.body.style.overflow = menuOpen ? "hidden" : "";
         return () => { document.body.style.overflow = ""; };
@@ -69,29 +90,30 @@ export default function NavBar() {
     return (
         <nav
             ref={navRef}
-            className={`w-full sticky top-0 z-50 relative text-white transition-all duration-300 ${
-                scrolled
-                    ? "bg-black/80 backdrop-blur-xl shadow-[0_2px_24px_rgba(0,0,0,0.4)]"
-                    : "bg-transparent backdrop-blur-sm"
-            }`}
+            className={`w-full fixed top-0 z-50 text-white transition-all duration-500 ${scrolled?' -translate-y-52':''}`}
         >
-            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20 sm:h-20 lg:h-24">
+            <div 
+                className="
+                 relative px-4 sm:px-6 lg:px-10 md:grid md:grid-cols-[1fr_auto_1fr] md:justify-center md:items-center h-20 sm:h-20 lg:h-24
+                max-w-full mx-5 my-5 flex items-center justify-between max-md:bg-black-soft/50 max-md:backdrop-blur-xl md:px-10 max-md:border max-md:border-white/10 max-md:rounded-full max-md:shadow-lg max-md:shadow-black/20">
 
                 {/* ── Logo ── */}
                 <a href="#inicio" onClick={(e) => handleLinkClick(e, "inicio")}>
-                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className="h-16 sm:h-18 lg:h-22 w-auto" />
+                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className={`h-16 sm:h-18 lg:h-22 w-auto`} />
                 </a>
 
                 {/* ── Links desktop ── */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className={`hidden md:flex items-center gap-8 md:bg-black-soft/50 md:backdrop-blur-xl md:py-3 md:px-10 md:border md:border-white/10 md:rounded-full md:shadow-lg md:shadow-black/20 `}>
                     {links.map((link) => (
                         <a
                             key={link.id}
                             href={`#${link.id}`}
+                            onMouseEnter={()=>(setOnHover(link.id))}
+                            onMouseLeave={()=>(setOnHover(null))}
                             aria-current={activeSection === link.id ? "page" : undefined}
-                            className="relative pb-2 text-body font-medium transition-colors duration-300 group"
+                            className={`relative  pb-2 text-body font-medium transition-colors duration-300 group`}
                             style={{
-                                color: activeSection === link.id ? "#FFFFFF" : "#999999",
+                                color: activeSection === link.id || onHover === link.id ? "#FFFFFF" : "#999999",
                             }}
                         >
                             {link.text}
@@ -100,19 +122,22 @@ export default function NavBar() {
                             <span
                                 style={{
                                     position: "absolute",
-                                    bottom: 0,
+                                    bottom: 7,
                                     left: 0,
                                     height: "2px",
                                     backgroundColor: "#00A3FF",
                                     borderRadius: "9999px",
                                     transition: "width 0.3s ease, opacity 0.3s ease",
-                                    width: activeSection === link.id ? "100%" : "0%",
-                                    opacity: activeSection === link.id ? 1 : 0,
+                                    width: activeSection===link.id || onHover === link.id ? "100%" : "0%",
+                                    opacity: activeSection === link.id || onHover === link.id ? 1 : 0,
                                 }}
                             />
                         </a>
                     ))}
                 </div>
+
+
+
 
                 {/* ── Botón hamburguesa mobile ── */}
                 <button
@@ -135,7 +160,7 @@ export default function NavBar() {
                 id="mobile-menu"
                 role="navigation"
                 aria-label="Menú principal"
-                className={`md:hidden overflow-hidden bg-black-soft/95 backdrop-blur-xl border-t border-muted/20 transition-all duration-300 ease-in-out ${
+                className={`md:hidden overflow-hidden rounded-2xl mx-5 bg-black-soft/70 backdrop-blur-xl border-t border-muted/20 transition-all duration-300 ease-in-out ${
                     menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
                 }`}
             >

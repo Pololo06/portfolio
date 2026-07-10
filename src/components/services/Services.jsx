@@ -18,12 +18,12 @@ export default function Services() {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="w-full relative overflow-hidden scroll-mt-20 py-section" id="servicios">
+    <section className="w-full relative scroll-mt-20 py-section" id="servicios">
 
       {/* Fondo decorativo */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute top-0 right-0 w-125 h-125 rounded-full opacity-[0.07] blur-3xl bg-blue-raven" />
-        <div className="absolute bottom-0 left-0 w-100 h-100 rounded-full opacity-[0.06] blur-3xl bg-blue-electric" />
+        <div className="absolute top-0 right-0 w-125 h-125 rounded-full opacity-[0.07] blur-3xl bg-blue-raven animate-blob-glow-2" />
+        <div className="absolute bottom-0 left-0 w-100 h-100 rounded-full opacity-[0.06] blur-3xl bg-blue-electric animate-blob-glow-2" />
       </div>
 
       <div ref={ref} className="relative z-10 mx-auto max-w-4xl px-6 flex flex-col items-center gap-3">

@@ -37,17 +37,16 @@ export default function Contact() {
             `Empresa/Proyecto: ${empresa}\nCorreo: ${correo}\n\nIdea de proyecto:\n${idea}\n\nRequerimientos adicionales:\n${requerimientos}`
         );
         window.open(`mailto:ravenmind.dev@gmail.com?subject=${subject}&body=${body}`, "_blank");
-        // No limpiamos el formulario automáticamente: mailto: no confirma que el usuario
-        // realmente haya enviado el correo (puede cancelar la ventana del cliente de mail).
+
     };
 
     return (
-        <section id="contacto" className="relative bg-black text-white py-section overflow-hidden scroll-mt-20">
+        <section id="contacto" className="relative bg-black text-white py-section scroll-mt-20">
 
             {/* ── Fondos decorativos ── */}
             <div className="pointer-events-none absolute inset-0 z-0">
-                <div className="absolute -top-40 -left-40 w-150 h-150 rounded-full opacity-10 blur-3xl bg-blue-raven" />
-                <div className="absolute -bottom-40 -right-40 w-125 h-125 rounded-full opacity-10 blur-3xl bg-blue-electric" />
+                <div className="absolute -top-40 -left-40 w-150 h-150 rounded-full opacity-10 blur-3xl bg-blue-raven animate-blob-glow-2" />
+                <div className="absolute -bottom-40 -right-40 w-125 h-125 rounded-full opacity-10 blur-3xl bg-blue-electric animate-blob-glow-2" />
 
                 <div className={`absolute top-22 left-4 transition-opacity duration-700 ${isVisibleW ? "opacity-[0.06]" : "opacity-0"}`}>
                     <FontAwesomeIcon icon={faWhatsapp} className="text-[14rem] sm:text-[20rem] lg:text-[28rem]" />
