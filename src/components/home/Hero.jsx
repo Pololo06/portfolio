@@ -50,7 +50,7 @@ export default function Hero() {
         <div className="w-[75%] md:scale-[0.8] lg:scale-[1.128] aspect-square">
         <Suspense fallback={null}>
             <Spline
-            scene="/model_keyboard.splinecode"
+            scene="/model_keyboard.spline"
             onLoad={handleSplineLoad}
             renderOnDemand={true}
             style={{ width: "100%", height: "100%" }}
