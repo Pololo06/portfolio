@@ -92,14 +92,11 @@ export default function NavBar() {
             ref={navRef}
             className={`w-full fixed top-0 z-50 text-white transition-all duration-500 ${scrolled?' -translate-y-52':''}`}
         >
-            <div 
-                className="
-                 relative px-4 sm:px-6 lg:px-10 md:grid md:grid-cols-[1fr_auto_1fr] md:justify-center md:items-center h-20 sm:h-20 lg:h-24
-                max-w-full mx-5 my-5 flex items-center justify-between max-md:bg-black-soft/50 max-md:backdrop-blur-xl md:px-10 max-md:border max-md:border-white/10 max-md:rounded-full max-md:shadow-lg max-md:shadow-black/20">
+            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-14 sm:h-14 lg:h-16">
 
                 {/* ── Logo ── */}
                 <a href="#inicio" onClick={(e) => handleLinkClick(e, "inicio")}>
-                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className={`h-16 sm:h-18 lg:h-22 w-auto`} />
+                    <img src={logo} alt="Ravenmind - Ir al inicio" width={80} height={80} className="h-11 sm:h-12 lg:h-15 w-auto" />
                 </a>
 
                 {/* ── Links desktop ── */}

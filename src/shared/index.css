@@ -25,13 +25,29 @@
     --radius-modal:  38px;
     --radius-badge:  29.5px;
 
+    /* ── Avatares del equipo ── */
     --size-avatar-card-sm: clamp(3.75rem, 18vw, 5rem);   
     --size-avatar-card-md: 6.5rem;                        
     --size-avatar-card-lg: 9rem;                          
     --size-avatar-modal-sm: 5.5rem;                       
     --size-avatar-modal-md: 8rem;                         
 
+    /* Breakpoint xs (576px): móvil = franja; ≥xs = grid. */
+    --breakpoint-xs: 36rem;
+
+    /* ── Padding vertical de sección ── */
     --spacing-section: clamp(6rem, 4rem + 6vw, 10rem);
+
+    /* ── Espaciado vertical fluido (vh) para secciones full-height ── */
+    --spacing-vfit-2xs: clamp(0.4rem, 1.1vh, 0.85rem);
+    --spacing-vfit-xs:  clamp(0.55rem, 1.5vh, 1.25rem);
+    --spacing-vfit-sm:  clamp(0.75rem, 2vh, 1.5rem);
+    --spacing-vfit-md:  clamp(1.25rem, 3vh, 2.75rem);
+    --spacing-vfit-lg:  clamp(1.75rem, 4.5vh, 4.5rem);
+    --spacing-vfit-xl:  clamp(2rem, 5vh, 5.5rem);
+
+    /* Alto del textarea, fluido con el viewport */
+    --spacing-field-fit: clamp(3.75rem, 10vh, 7.5rem);
 
     --animate-slide-up:   slide-up 0.3s ease-out;
     --animate-slide-left: slide-left 0.3s ease-out;
@@ -69,6 +85,24 @@
     --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-fast: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-fade-in-up-slow: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    /* ── Tokens de la sección Nosotros ── */
+
+    /* Escala tipográfica editorial fluida */
+    --text-title-lg: clamp(1.375rem, 1.2rem + 1vw, 2rem);
+    --text-lead:     clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+    --text-copy:     1.0625rem;
+    --text-caption:  0.8125rem;
+
+    /* Radio editorial */
+    --radius-soft: 10px;
+
+    /* Motion: curvas y duraciones nombradas */
+    --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);  /* entradas: desacelera y asienta */
+    --ease-hold:   cubic-bezier(0.65, 0, 0.35, 1);  /* cambios de estado in-place */
+    --motion-quick: 150ms;  /* microinteracción: hover, focus */
+    --motion-base:  300ms;  /* cambios de estado */
+    --motion-enter: 600ms;  /* reveals de entrada — una sola vez */
 }
 
 @keyframes floating{
@@ -172,6 +206,35 @@
 }
 
 /* ── Aplicar fuente a TODO globalmente ── */
+/* ── Barridos de entrada (dentro de máscaras) ── */
+@keyframes sweep-in-down {
+    from { transform: translateY(-104%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes sweep-in-up {
+    from { transform: translateY(104%); }
+    to   { transform: translateY(0); }
+}
+
+/* Salida con nombre propio: CSS solo reinicia una animación si cambia el
+   nombre de la keyframe, así entrada/salida se repiten en cada ciclo. */
+@keyframes sweep-out-up {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-104%); }
+}
+
+@keyframes sweep-out-down {
+    from { transform: translateY(0); }
+    to   { transform: translateY(104%); }
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(1.75rem) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Reset base ── */
 @layer base {
     * {
         margin: 0;
@@ -187,5 +250,88 @@
         @apply font-sans;
         background-color: var(--color-black);
         overflow-x: hidden;
+    }
+}
+
+/* ── Utilidades de la sección Nosotros ── */
+@layer components {
+    /* Entrada one-shot; el retraso se controla con --stagger. */
+    .enter-sweep-down {
+        animation: sweep-in-down 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-sweep-up {
+        animation: sweep-in-up 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-fade {
+        animation: fade-in 700ms var(--ease-settle) both;
+        animation-delay: var(--stagger, 0ms);
+    }
+
+    .enter-modal {
+        animation: modal-in var(--motion-enter) var(--ease-settle) both;
+    }
+
+    /* Salida = espejo de la entrada, en orden inverso vía --stagger-exit. */
+    .exit-sweep-up {
+        animation: sweep-out-up 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger-exit, 0ms);
+    }
+
+    .exit-sweep-down {
+        animation: sweep-out-down 850ms var(--ease-settle) both;
+        animation-delay: var(--stagger-exit, 0ms);
+    }
+
+    /* Titular display (Anton). */
+    .type-headline {
+        font-family: var(--font-title);
+        letter-spacing: -0.01em;
+        line-height: 1.05;
+    }
+
+    /* Máscara de imagen (recorte cover). */
+    .tone-media {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tone-media > img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Punto focal de los retratos (hacia el rostro). */
+    .object-portrait {
+        object-position: 50% 25%;
+    }
+
+    /* Sección full-height: min-height (no recorta si el contenido excede) + centrado. */
+    .section-fullscreen {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-block: var(--spacing-section);
+        overflow: hidden;
+        scroll-margin-top: 5rem;
+    }
+}
+
+/* Reduced-motion: entradas/salidas quedan estáticas. */
+@media (prefers-reduced-motion: reduce) {
+    .enter-sweep-down,
+    .enter-sweep-up,
+    .exit-sweep-down,
+    .exit-sweep-up,
+    .enter-fade,
+    .enter-modal {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
     }
 }

@@ -16,7 +16,7 @@ export default function TextArea({label,placeholder,value,onChange,required = fa
                 onChange={onChange}
                 required={required}
                 aria-required={required}
-                className="w-full bg-transparent border border-muted rounded-2xl px-4 py-3 resize-none text-small outline-none focus:border-blue-mid"
+                className="w-full h-field-fit bg-transparent border border-muted rounded-2xl px-4 py-3 resize-none text-small outline-none focus:border-blue-mid"
             />
         </div>
     );

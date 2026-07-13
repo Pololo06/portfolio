@@ -3,13 +3,13 @@ import samuel from "../../assets/other/samuel.jpeg";
 import juan from "../../assets/other/farelo.png";
 import santiago from "../../assets/other/santiago.jpeg";
 import lucas from "../../assets/other/lucas.jpeg";
-import berdugo from "../../assets/other/berdugo.jpeg"
+import berdugo from "../../assets/other/berdugo.jpeg";
 import ContactMethod from "../contact/ContactMethod.jsx";
 import { useEffect, useRef, useState } from "react";
-import { faGithub, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useScrollReveal from "../../hooks/useScrollReveal";
+import { getMemberSocials } from "./memberSocials";
 
 const members = [
   { name: "Samuel Polo", role: "Ing. Frontend", photo: samuel, description: "Entusiasta de aprender, me dedico al front end para demostrar mis habilidades en diseñar, crear e innovar páginas web. Otra de mis fortalezas es el trabajo en equipo ya que siempre busco tener dinámica con mi grupo de trabajo para mantener un ambiente laboral positivo y productivo.", instagram: 'https://www.instagram.com/saml_pol?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', git: 'https://github.com/Pololo06', linkedin: 'https://co.linkedin.com/in/samuel-polo-0382a9388' },
@@ -23,155 +23,174 @@ export default function AboutUs() {
   const [selectedMember, setSelectedMember] = useState(null);
   const { ref, isVisible } = useScrollReveal();
   const closeButtonRef = useRef(null);
+  const dialogRef = useRef(null);
+  const triggerRef = useRef(null);
 
+  /* Modal accesible: focus-trap, Escape, scroll-lock y devolución de foco. */
   useEffect(() => {
     if (!selectedMember) return;
 
     closeButtonRef.current?.focus();
+    document.body.style.overflow = "hidden";
 
     const onKeyDown = (e) => {
-      if (e.key === "Escape") setSelectedMember(null);
+      if (e.key === "Escape") {
+        setSelectedMember(null);
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusables = dialogRef.current?.querySelectorAll(
+        'a[href], button:not([disabled])'
+      );
+      if (!focusables?.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      triggerRef.current?.focus();
+    };
   }, [selectedMember]);
 
+  const openMember = (member) => (e) => {
+    triggerRef.current = e.currentTarget;
+    setSelectedMember(member);
+  };
+
   return (
-    <section id="nosotros" className="w-full py-section overflow-hidden scroll-mt-20">
-      <div ref={ref} className="mx-auto max-w-6xl px-6 flex flex-col items-center">
+    <section id="nosotros" className="section-fullscreen w-full">
+      <div className="mx-auto max-w-[90rem] px-6 w-full">
 
-        {/* ── Eyebrow ── */}
-        <div className={`flex items-center gap-3 mb-4 transition-[opacity,transform] duration-500 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          <div className="h-px w-12 bg-blue-electric opacity-50" />
-          <span className="text-small font-semibold tracking-widest uppercase text-blue-electric">
-            El equipo
-          </span>
-          <div className="h-px w-12 bg-blue-electric opacity-50" />
+        {/* ── Cabecera ── */}
+        <div ref={ref} className="flex flex-col items-center">
+
+          {/* Eyebrow */}
+          <div className={`flex items-center gap-3 mb-2 transition-[opacity,transform] duration-500 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="h-px w-12 bg-blue-electric opacity-50" />
+            <span className="text-small font-semibold tracking-widest uppercase text-blue-electric">
+              El equipo
+            </span>
+            <div className="h-px w-12 bg-blue-electric opacity-50" />
+          </div>
+
+          {/* Título */}
+          <h2 className={`font-bold font-title tracking-wide text-white text-title-mobile lg:text-title text-center mb-4 transition-[opacity,transform] duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            Nosotros
+          </h2>
+
+          <p className={`text-lead leading-snug text-text-muted text-center max-w-xl mb-vfit-lg transition-[opacity,transform] duration-[900ms] ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            Somos un equipo de ingenieros apasionados por construir soluciones
+            digitales que hacen la diferencia.
+          </p>
         </div>
 
-        {/* ── Título ── */}
-        <h2 className={`text-title-mobile lg:text-title font-bold font-title tracking-wide text-white-soft text-center mb-4 transition-[opacity,transform] duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          Nosotros
-        </h2>
-
-        <p className={`text-body text-text-muted text-center max-w-xl mb-16 transition-[opacity,transform] duration-[900ms] ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          Somos un equipo de ingenieros apasionados por construir soluciones digitales que hacen la diferencia.
-        </p>
-
-        {/* ── Grid de miembros ── */}
-        <div className="flex flex-col gap-8 sm:gap-10 mb-16 sm:mb-20 w-full">
-          {/* Primera fila: 3 columnas siempre */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-10 lg:gap-20 justify-items-center max-w-md sm:max-w-2xl lg:max-w-none mx-auto">
-            {members.slice(0, 3).map((member, i) => (
+        {/* ── Franja del equipo: strip con snap en móvil, fila de 5 desde xs (≥576px) ── */}
+        <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-3 xs:grid xs:grid-cols-5 xs:gap-2 xs:overflow-visible xs:pb-0">
+          {members.map((member, i) => (
+            <div key={member.name} className="min-w-[56vw] snap-center xs:min-w-0">
               <TeamComponent
-                key={member.name}
-                name={member.name}
-                role={member.role}
-                photo={member.photo}
-                onClick={() => setSelectedMember(member)}
+                member={member}
+                onClick={openMember(member)}
                 index={i}
+                total={members.length}
               />
-            ))}
-          </div>
-
-          {/* Segunda fila: 2 columnas siempre*/}
-          <div className="grid grid-cols-2 gap-3 sm:gap-10 lg:gap-16 justify-items-center max-w-[16rem] sm:max-w-md lg:max-w-none mx-auto">
-            {members.slice(3).map((member, i) => (
-              <TeamComponent
-                key={member.name}
-                name={member.name}
-                role={member.role}
-                photo={member.photo}
-                onClick={() => setSelectedMember(member)}
-                index={i + 3}
-              />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
-        {/* ── Card misión ── */}
-        <div className={`relative w-full rounded-card bg-black-soft border-2 border-transparent hover:border-blue-raven px-8 py-10 md:px-16 md:py-12 transition-[opacity,transform,border-color] duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          {/* Línea acento izquierda */}
-          <div className="pl-8 border-l-4 border-blue-raven md:pl-12">
-            <h3 className="mb-3 text-subtitle sm:text-page-title font-bold text-white-soft">
-              Nuestra misión
-            </h3>
-            <p className="text-small sm:text-body text-white-soft max-w-3xl">
-              Desarrollar soluciones web para empresas pequeñas, medianas o grandes que integran
-              tecnologías vanguardistas, como modelos de inteligencia artificial, para permitir a
-              nuestros clientes estar a la par del mercado y optimizar sus flujos de trabajo.
-            </p>
-          </div>
+        {/* ── Misión ── */}
+        <div className="mt-vfit-xl border-t border-white/10 pt-vfit-md lg:grid lg:grid-cols-12 lg:gap-8">
+          <h3 className="text-caption uppercase tracking-[0.18em] text-text-muted lg:col-span-3">
+            Nuestra misión
+          </h3>
+          <p className="mt-6 max-w-3xl text-lead leading-snug text-white-soft lg:col-span-9 lg:mt-0">
+            Creamos soluciones web con tecnologías vanguardistas, como la IA,
+            para que nuestros clientes optimicen sus procesos y lideren su mercado.
+          </p>
         </div>
 
       </div>
 
-
-
-      {/* ── Modal ── */}
+      {/* ── Modal de ficha completa ── */}
       {selectedMember && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in"
+          className="enter-fade fixed inset-0 z-[70] flex items-center justify-center bg-black/90 p-4 sm:p-6"
           onClick={() => setSelectedMember(null)}
           role="presentation"
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="team-modal-name"
-            className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-10 bg-black-soft/90 border border-muted/30 rounded-card p-4 sm:p-10 md:p-14 w-full max-w-3xl mx-4 sm:mx-6 max-h-[85vh] overflow-y-auto animate-reveal-card"
-            style={{ boxShadow: "0 0 60px rgba(0,52,158,0.25), inset 0 1px 0 rgba(255,255,255,0.04)" }}
             onClick={(e) => e.stopPropagation()}
+            className="enter-modal relative max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-soft bg-surface p-6 sm:p-10"
           >
-
-            <div
-              className="absolute top-0 left-10 right-10 h-px"
-              style={{ background: "linear-gradient(to right, transparent, #00349E, #00A3FF, #00349E, transparent)" }}
-            />
-
             <button
               ref={closeButtonRef}
               onClick={() => setSelectedMember(null)}
-              className="absolute top-4 right-5 text-text-muted hover:text-white transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric rounded-full"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center text-text-muted transition-colors duration-[var(--motion-quick)] hover:text-white"
               aria-label="Cerrar"
             >
               <FontAwesomeIcon icon={faXmark} style={{ fontSize: "1.4rem" }} />
             </button>
 
-            <div className="shrink-0 flex flex-col items-center gap-4">
-              <img
-                src={selectedMember?.photo}
-                alt={selectedMember?.name}
-                width={128}
-                height={128}
-                loading="lazy"
-                decoding="async"
-                className="size-[var(--size-avatar-modal-sm)] sm:size-[var(--size-avatar-modal-md)] rounded-full border-4 border-blue-raven object-cover animate-floating shadow-[0_0_30px_6px_rgba(0,52,158,0.5)]"
-              />
+            <div className="grid gap-8 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-12">
 
-              <div className="flex items-center gap-3">
-                <ContactMethod icon={faInstagram} href={selectedMember?.instagram} />
-                <ContactMethod icon={faGithub} href={selectedMember?.git} />
-                {selectedMember?.linkedin && (
-                  <ContactMethod icon={faLinkedin} href={selectedMember?.linkedin} />
-                )}
+              {/* Columna del retrato */}
+              <div
+                className="enter-fade flex flex-col items-center gap-6 md:items-start"
+                style={{ "--stagger": "140ms" }}
+              >
+                <div className="tone-media aspect-[4/5] w-48 overflow-hidden rounded-soft sm:w-56 md:w-full">
+                  <img
+                    src={selectedMember.photo}
+                    alt={selectedMember.name}
+                    width={240}
+                    height={300}
+                    loading="lazy"
+                    decoding="async"
+                    className="object-portrait"
+                  />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {getMemberSocials(selectedMember).map(({ key, icon, href }) => (
+                    <ContactMethod key={key} icon={icon} href={href} />
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="flex flex-col gap-3 text-white">
-              <div>
-                <h3 id="team-modal-name" className="text-body sm:text-page-title font-bold">
-                  {selectedMember?.name}
+              {/* Columna de texto */}
+              <div
+                className="enter-fade flex flex-col"
+                style={{ "--stagger": "200ms" }}
+              >
+                <h3 id="team-modal-name" className="type-headline text-title-lg text-white-soft">
+                  {selectedMember.name}
                 </h3>
-                <span className="text-small sm:text-subtitle text-blue-electric font-medium">
-                  {selectedMember?.role}
+                <span className="mt-2 text-caption uppercase tracking-[0.2em] text-text-muted">
+                  {selectedMember.role}
                 </span>
+                <span aria-hidden="true" className="my-6 h-px w-full bg-white/10" />
+                <p className="text-copy leading-relaxed text-text-muted">
+                  {selectedMember.description}
+                </p>
               </div>
-              <p className="text-small sm:text-body text-text-muted leading-relaxed text-justify">
-                {selectedMember?.description}
-              </p>
-            </div>
 
+            </div>
           </div>
         </div>
       )}

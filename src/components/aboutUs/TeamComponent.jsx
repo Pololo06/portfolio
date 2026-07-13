@@ -1,45 +1,85 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useScrollReveal from "../../hooks/useScrollReveal";
+import { getMemberSocials } from "./memberSocials";
 
-const durations = [500, 700, 900, 1100];
+/* Retrato del equipo: entra/sale con un barrido dentro de la máscara;
+   hover/focus (o táctil) revela nombre, rol y redes; click abre la ficha. */
+export default function TeamComponent({ member, onClick, index = 0, total = 0 }) {
+  // Viewport reducido: el barrido de salida se dispara mientras el retrato
+  // aún está en pantalla, no cuando ya salió.
+  const { ref, isVisible, hasRevealed } = useScrollReveal({
+    rootMargin: "-20% 0px -20% 0px",
+  });
 
-export default function TeamComponent({ name, role, photo, onClick, index = 0 }) {
-  const { ref, isVisible } = useScrollReveal({ delay: index * 150 });
-  const duration = durations[index] || 700;
+  /* Entrada: barrido en cascada del 1º al último (stagger = index).
+     Salida: mismo barrido invertido y en orden inverso (del último al 1º). */
+  const enterStagger = index * 90;
+  const exitStagger = (total - 1 - index) * 90;
+  const sweep = isVisible
+    ? index % 2
+      ? "enter-sweep-up"
+      : "enter-sweep-down"
+    : hasRevealed
+      ? index % 2
+        ? "exit-sweep-down"
+        : "exit-sweep-up"
+      : index % 2
+        ? "translate-y-[104%]"
+        : "-translate-y-[104%]";
+
+  const socials = getMemberSocials(member);
 
   return (
-    <button
-      type="button"
+    <div
       ref={ref}
-      className={`group flex flex-col items-center gap-2 sm:gap-3 cursor-pointer min-w-0 w-full text-center transition-[opacity,transform] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-2xl ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-      style={{ transitionDuration: `${duration}ms` }}
-      onClick={onClick}
-      aria-label={`Ver más sobre ${name}, ${role}`}
+      className="group relative aspect-[4/5] xs:aspect-[3/4] w-full overflow-hidden"
+      style={{ "--stagger": `${enterStagger}ms`, "--stagger-exit": `${exitStagger}ms` }}
     >
-
-      <div className="relative shrink-0">
+      <div className="tone-media absolute inset-0">
         <img
-          src={photo}
+          src={member.photo}
           alt=""
           width={144}
           height={144}
           loading="lazy"
           decoding="async"
-          className="size-[var(--size-avatar-card-sm)] sm:size-[var(--size-avatar-card-md)] lg:size-[var(--size-avatar-card-lg)] rounded-full border-4 border-blue-raven object-cover transition-all duration-500 group-hover:scale-105 group-hover:border-blue-electric shadow-[0_0_40px_6px_rgba(0,52,158,0.8)] group-hover:shadow-[0_0_55px_10px_rgba(0,163,255,0.5)]"
+          className={`${sweep} object-portrait`}
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-full flex items-center justify-center bg-blue-deep/60 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"
-        >
-          <span className="text-small font-semibold text-white tracking-wide">Ver más</span>
-        </div>
       </div>
 
-      <h4 className="text-white-soft text-small sm:text-page-title font-bold text-balance group-hover:text-blue-electric transition-colors duration-300">
-        {name}
-      </h4>
-      <span className="text-small sm:text-body text-text-muted leading-none">
-        {role}
-      </span>
-    </button>
+      {/* Botón overlay: abre la ficha */}
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`Ver más sobre ${member.name}, ${member.role}`}
+        className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none"
+      />
+
+      {/* Info: siempre visible en táctil; hover/focus en desktop */}
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col gap-1 bg-gradient-to-t from-black/95 via-black/55 to-transparent p-4 pt-12 transition-[opacity,transform] duration-[var(--motion-base)] ease-[var(--ease-hold)] xs:translate-y-3 xs:group-hover:translate-y-0 xs:group-hover:opacity-100 xs:group-focus-within:translate-y-0 xs:group-focus-within:opacity-100 ${
+          isVisible ? "xs:opacity-0" : "opacity-0"
+        }`}
+      >
+        <h3 className="type-headline text-title-lg text-white-soft">{member.name}</h3>
+        <span className="text-caption uppercase tracking-[0.18em] text-text-muted">
+          {member.role}
+        </span>
+        <div className="pointer-events-auto mt-2 flex gap-4">
+          {socials.map(({ key, icon, href, label }) => (
+            <a
+              key={key}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={label}
+              className="text-text-muted transition-colors duration-[var(--motion-quick)] hover:text-blue-electric focus-visible:text-blue-electric"
+            >
+              <FontAwesomeIcon icon={icon} />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

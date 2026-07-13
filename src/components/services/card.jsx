@@ -24,7 +24,7 @@ export default function Card({ title, description, bigDescription, icon, index =
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="w-full flex items-center justify-between gap-3 sm:gap-6 px-4 py-5 sm:px-8 sm:py-7 text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric rounded-card"
+        className="w-full flex items-center justify-between gap-3 sm:gap-6 px-4 sm:px-8 py-vfit-sm text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-electric rounded-card"
       >
 
         <div className={`shrink-0 flex items-center justify-center size-11 sm:size-14 rounded-2xl transition-colors duration-300 ${isOpen ? "bg-blue-electric/15" : "bg-blue-raven/20"}`}>
