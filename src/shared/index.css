@@ -22,7 +22,9 @@
     --font-nav: "JetBrains Mono", serif;
 
     --radius-card:   20px;
-    --radius-modal:  38px;
+    --radius-modal:  38px;	
+  /* Modal: foco inicial, focus-trap, Escape, scroll-lock y devolución
+     del foco al disparador al cerrar. *
     --radius-badge:  29.5px;
 
     /* ── Avatares del equipo ── */
